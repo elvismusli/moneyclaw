@@ -22,4 +22,4 @@ Yes, but buyer-side checkout is the primary public narrative. Merchant and invoi
 
 ## Where is the exact skill file?
 
-See [../moneyclaw-skill/SKILL.md](../moneyclaw-skill/SKILL.md).
+See [moneyclaw-skill/SKILL.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/SKILL.md).

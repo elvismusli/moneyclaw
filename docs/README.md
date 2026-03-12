@@ -11,4 +11,4 @@ Start here:
 5. [Merchant Flows](./merchant-flows.md)
 6. [FAQ](./faq.md)
 
-If you want the exact public skill bundle, read [../moneyclaw-skill/SKILL.md](../moneyclaw-skill/SKILL.md).
+If you want the exact public skill bundle, read [moneyclaw-skill/SKILL.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/SKILL.md).
