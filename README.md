@@ -15,11 +15,13 @@
 <p align="center">
   <a href="https://moneyclaw.ai">Website</a>
   ·
+  <a href="https://elvismusli.github.io/moneyclaw/">Docs Site</a>
+  ·
   <a href="https://moneyclaw.ai/openclaw">OpenClaw Quickstart</a>
   ·
-  <a href="./docs/README.md">Docs</a>
+  <a href="https://elvismusli.github.io/moneyclaw/getting-started">Docs</a>
   ·
-  <a href="./moneyclaw-skill/SKILL.md">Skill</a>
+  <a href="https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/SKILL.md">Skill</a>
 </p>
 
 <p align="center">
@@ -96,16 +98,16 @@ Important boundary:
 
 MoneyClaw is for user-authorized payments. It is not designed to bypass issuer, merchant, fraud, KYC, sanctions, geography, or verification controls.
 
-Read the full model in [docs/security-model.md](./docs/security-model.md).
+Read the full model in [docs/security-model.md](https://elvismusli.github.io/moneyclaw/security-model).
 
 ## Reading Order
 
 Start here:
 
-1. [docs/getting-started.md](./docs/getting-started.md)
-2. [docs/openclaw-quickstart.md](./docs/openclaw-quickstart.md)
-3. [docs/api-overview.md](./docs/api-overview.md)
-4. [moneyclaw-skill/SKILL.md](./moneyclaw-skill/SKILL.md)
+1. [docs/getting-started.md](https://elvismusli.github.io/moneyclaw/getting-started)
+2. [docs/openclaw-quickstart.md](https://elvismusli.github.io/moneyclaw/openclaw-quickstart)
+3. [docs/api-overview.md](https://elvismusli.github.io/moneyclaw/api-overview)
+4. [moneyclaw-skill/SKILL.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/SKILL.md)
 
 ## Repo Map
 
@@ -137,7 +139,7 @@ Not published here:
 ## Support
 
 - Product site: [moneyclaw.ai](https://moneyclaw.ai)
-- Docs hub: [docs/README.md](./docs/README.md)
+- Docs hub: [elvismusli.github.io/moneyclaw](https://elvismusli.github.io/moneyclaw/)
 - Security contact: [SECURITY.md](./SECURITY.md)
 
 ## License
