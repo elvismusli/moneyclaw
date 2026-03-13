@@ -2,6 +2,8 @@
 
 MoneyClaw is designed around user-authorized agent payments.
 
+The goal is not to make payments invisible. The goal is to make real payments bounded, inspectable, and easier to control.
+
 ## Core Principles
 
 - prepaid by default

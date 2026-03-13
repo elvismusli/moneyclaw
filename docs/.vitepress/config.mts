@@ -1,16 +1,25 @@
 import { defineConfig } from 'vitepress';
 
+const siteUrl = process.env.DOCS_SITE_URL ?? 'https://elvismusli.github.io/moneyclaw';
+const base = process.env.DOCS_BASE ?? '/moneyclaw/';
+
 export default defineConfig({
   title: 'MoneyClaw',
   description: 'Real payments for OpenClaw agents.',
-  base: '/moneyclaw/',
+  base,
   cleanUrls: true,
   lastUpdated: true,
   head: [
-    ['link', { rel: 'icon', href: '/moneyclaw/crab.png' }],
+    ['link', { rel: 'icon', href: `${base}crab.png` }],
     ['meta', { property: 'og:title', content: 'MoneyClaw' }],
     ['meta', { property: 'og:description', content: 'Real payments for OpenClaw agents.' }],
-    ['meta', { property: 'og:image', content: 'https://elvismusli.github.io/moneyclaw/og.png' }],
+    ['meta', { property: 'og:type', content: 'website' }],
+    ['meta', { property: 'og:url', content: `${siteUrl}/` }],
+    ['meta', { property: 'og:image', content: `${siteUrl}/og-docs.png` }],
+    ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
+    ['meta', { property: 'twitter:title', content: 'MoneyClaw' }],
+    ['meta', { property: 'twitter:description', content: 'Real payments for OpenClaw agents.' }],
+    ['meta', { property: 'twitter:image', content: `${siteUrl}/og-docs.png` }],
     ['meta', { name: 'theme-color', content: '#ef6a3b' }],
   ],
   themeConfig: {
@@ -19,10 +28,9 @@ export default defineConfig({
     nav: [
       { text: 'Start', link: '/getting-started' },
       { text: 'Quickstart', link: '/openclaw-quickstart' },
-      { text: 'API', link: '/api-overview' },
+      { text: 'Trust', link: '/security-model' },
       { text: 'Skill', link: '/skill' },
-      { text: 'Examples', link: '/examples' },
-      { text: 'GitHub', link: 'https://github.com/elvismusli/moneyclaw' },
+      { text: 'Website', link: 'https://moneyclaw.ai' },
     ],
     sidebar: [
       {
@@ -43,12 +51,19 @@ export default defineConfig({
           { text: 'FAQ', link: '/faq' },
         ],
       },
+      {
+        text: 'Assets',
+        items: [
+          { text: 'Examples', link: '/examples' },
+          { text: 'GitHub Repo', link: 'https://github.com/elvismusli/moneyclaw' },
+        ],
+      },
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/elvismusli/moneyclaw' },
     ],
     footer: {
-      message: 'Public docs and skill layer for MoneyClaw.',
+      message: 'Public docs, skill files, and trust model for MoneyClaw.',
       copyright: 'Copyright © 2026 MoneyClaw',
     },
     search: {

@@ -1,5 +1,7 @@
 # OpenClaw Quickstart
 
+This is the fastest path from install to first real payment-capable session.
+
 ## Install
 
 ```bash
@@ -15,6 +17,11 @@ MONEYCLAW_API_KEY
 ```
 
 Start a fresh session after install.
+
+## Choose Your Control Mode
+
+- approval-based: the agent asks before payment actions
+- pre-authorized: the agent can act inside the spend scope and permissions you configured
 
 ## Suggested First Session
 

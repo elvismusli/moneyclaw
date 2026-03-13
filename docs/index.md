@@ -3,40 +3,38 @@ layout: home
 
 hero:
   name: MoneyClaw
-  text: Real payments for OpenClaw agents.
-  tagline: Prepaid wallet, virtual card, OTP and 3DS inbox, and auditable payment flows.
+  text: Payments your OpenClaw agent can actually use.
+  tagline: Give your agent a prepaid wallet, a virtual card, a dedicated OTP and 3DS inbox, and a clear audit trail for real checkout.
   image:
     src: /crab.png
     alt: MoneyClaw mascot
   actions:
     - theme: brand
-      text: Read the docs
+      text: Start here
       link: /getting-started
     - theme: alt
       text: OpenClaw quickstart
       link: /openclaw-quickstart
     - theme: alt
-      text: View the skill
-      link: /skill
+      text: Visit moneyclaw.ai
+      link: https://moneyclaw.ai
 
 features:
   - title: Prepaid by default
-    details: Bound spend, separate wallet and card balance, and a clearer risk model for agent payments.
+    details: Bound spend with separate wallet and card balances, so agent payments stay easier to inspect and control.
   - title: Built for real checkout
-    details: Issue a card, top it up, complete browser checkout, then verify what actually happened.
+    details: Issue a card, top it up, complete browser checkout, then verify the final transaction result.
   - title: OTP and 3DS inbox
-    details: Let the agent fetch verification codes from a dedicated inbox instead of relying on human screenshots.
-  - title: Public trust model
-    details: This repo documents what MoneyClaw does, what it does not do, and the safety boundaries around user-authorized payments.
+    details: Let the agent fetch verification codes from a dedicated inbox instead of relying on human screenshots or guesswork.
+  - title: User-controlled autonomy
+    details: Run MoneyClaw in approval-based or pre-authorized mode depending on how much control you want to keep.
   - title: OpenClaw skill included
     details: The public skill bundle and reference files are published in this repo so people can inspect exactly what the agent sees.
   - title: Merchant path too
-    details: Hosted invoices and acquiring flows are supported, but buyer-side checkout remains the main public narrative.
+    details: Hosted invoices and merchant flows are supported too, but buyer-side checkout stays the main public entrypoint.
 ---
 
-## Why This Exists
-
-Most agent demos stop right before payment.
+## What You Can Do Today
 
 MoneyClaw is the layer that lets the loop continue:
 
@@ -47,27 +45,24 @@ MoneyClaw is the layer that lets the loop continue:
 - fetch OTP or 3DS codes
 - verify the final transaction state
 
-## Public Scope
+## Built For Safe Agent Payments
 
-This site is intentionally curated.
+- prepaid balances keep risk bounded
+- wallet and card history stay separate
+- the user chooses approval-based or pre-authorized operation
+- OTP and 3DS stay inside the normal verification flow
+- transaction history stays queryable before retries
 
-Published here:
-
-- product docs
-- the public OpenClaw skill
-- quickstart and examples
-- safety and trust model
-
-Intentionally not published here:
-
-- internal incidents
-- ops and deployment runbooks
-- infrastructure hardening notes
-- private production context
-
-## Start Here
+## Read In This Order
 
 1. [Getting Started](/getting-started)
 2. [OpenClaw Quickstart](/openclaw-quickstart)
-3. [API Overview](/api-overview)
-4. [Security Model](/security-model)
+3. [Security Model](/security-model)
+4. [API Overview](/api-overview)
+5. [Skill](/skill)
+
+## Need Merchant Flows?
+
+MoneyClaw also supports hosted invoices, checkout links, and merchant-side automation.
+
+Start with [Merchant Flows](/merchant-flows) when you need the collection side, not just buyer-side checkout.

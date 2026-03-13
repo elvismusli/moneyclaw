@@ -9,7 +9,13 @@ It gives an agent:
 - a dedicated OTP and 3DS inbox
 - queryable transaction history
 
-## Basic Flow
+## What You Need
+
+- a MoneyClaw account
+- an API key
+- OpenClaw with the `moneyclaw` skill installed
+
+## Five Minute Path
 
 1. Create a MoneyClaw API key.
 2. Install the skill with `clawhub install moneyclaw`.
