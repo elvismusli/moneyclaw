@@ -87,9 +87,9 @@ Important fields:
 - `balance`: wallet balance
 - `depositAddress`: where to send USDT
 - `mailboxAddress`: inbox address for OTP, receipts, and verification messages
-- `card`: optional legacy compatibility card object, if one still exists
+- `legacyCompatibilityCardPresent` and `legacyCompatibilityCardStatus`: hints that an older visible compatibility card still exists
 
-When the user asks for readiness, report wallet balance first. Mention legacy card balance only if a compatibility card exists and the flow explicitly depends on it.
+When the user asks for readiness, report wallet balance first. Mention legacy visible-card state only if a compatibility card exists and the flow explicitly depends on it.
 
 ### 2. Create an auditable payment task
 
@@ -221,6 +221,7 @@ Issue a compatibility card:
 
 ```bash
 curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  -H "X-MoneyClaw-Compatibility-Mode: visible-card" \
   https://moneyclaw.ai/api/cards/issue
 ```
 
@@ -228,6 +229,7 @@ Top up the compatibility card:
 
 ```bash
 curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  -H "X-MoneyClaw-Compatibility-Mode: visible-card" \
   -H "Content-Type: application/json" \
   -d '{"amount": 10, "currency": "USD"}' \
   https://moneyclaw.ai/api/cards/{cardId}/topup
@@ -237,15 +239,17 @@ Get compatibility-card credentials:
 
 ```bash
 curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  -H "X-MoneyClaw-Compatibility-Mode: visible-card" \
   https://moneyclaw.ai/api/cards/{cardId}/sensitive
 ```
 
 Rules:
 
 - this is a compatibility surface, not the preferred long-term model
+- every legacy `/api/cards/*` request must include `X-MoneyClaw-Compatibility-Mode: visible-card`
 - creating a new visible compatibility card deducts the applicable card-issue fee from wallet balance
 - successful legacy direct-card purchases may also create a separate 2% payment-fee ledger entry
-- use `card.cardId`, not `card.id`, for legacy card routes
+- direct-card identifiers no longer come from normal `/api/me`; treat them as explicit compatibility-only inputs
 - read transactions before retrying a failed direct-card checkout
 
 ## Payment Execution Rules

@@ -29,5 +29,6 @@ curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
 ```bash
 curl -X POST \
   -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  -H "X-MoneyClaw-Compatibility-Mode: visible-card" \
   https://moneyclaw.ai/api/cards/issue
 ```
