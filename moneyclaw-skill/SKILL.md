@@ -1,15 +1,15 @@
 ---
 name: moneyclaw
-description: Enable OpenClaw agents to make real online purchases with a prepaid wallet and virtual card, retrieve OTP/3DS codes, and verify payment outcomes with user-controlled autonomy.
+description: Create payment tasks, run recurring spend on hidden subscription cards, fetch OTP/3DS codes, and complete authorized online purchases with a prepaid MoneyClaw wallet.
 homepage: https://moneyclaw.ai
-metadata: {"openclaw":{"requires":{"env":["MONEYCLAW_API_KEY"]},"primaryEnv":"MONEYCLAW_API_KEY","emoji":"💳"}}
+metadata: {"openclaw":{"requires":{"env":["MONEYCLAW_API_KEY"]},"primaryEnv":"MONEYCLAW_API_KEY","emoji":"💳","homepage":"https://moneyclaw.ai"}}
 ---
 
 # MoneyClaw
 
-MoneyClaw gives OpenClaw agents real spending capability with user-configurable autonomy, prepaid risk boundaries, OTP/3DS support, and auditable payment flows.
+MoneyClaw gives OpenClaw agents real spending capability with user-configurable autonomy, prepaid risk boundaries, OTP/3DS support, auditable payment flows, and hidden subscription cards for recurring spend.
 
-Primary use case: buyer-side online purchases for OpenClaw agents.
+Primary use case: buyer-side payments and recurring subscriptions for OpenClaw agents.
 
 Secondary use cases: invoices, hosted payment links, and merchant/acquiring workflows when the user explicitly asks for them.
 
@@ -29,7 +29,8 @@ MoneyClaw is designed for real, user-authorized agent payments.
 
 - use prepaid balances to keep risk bounded
 - use a dedicated inbox for OTP and 3DS verification flows
-- use queryable wallet and card history to inspect payment activity
+- use payment intents and subscriptions as auditable execution surfaces
+- keep hidden subscription cards scoped to one service or merchant
 - let the user choose how much autonomy the agent should have
 
 ## Autonomy Model
@@ -38,6 +39,7 @@ MoneyClaw may be used in either approval-based or pre-authorized mode.
 
 - In approval-based mode, the agent asks the user before executing payment actions.
 - In pre-authorized mode, the agent may execute payment actions within the spending scope, balance, and permissions configured by the user.
+- Creating an `approval_based` intent is fine with an API key, but approving that pending intent currently requires a human dashboard session rather than API-key-only automation.
 
 ## Safety Boundaries
 
@@ -50,18 +52,25 @@ MoneyClaw may be used in either approval-based or pre-authorized mode.
 - Prefer prepaid, bounded-risk flows by default.
 - Only use invoice, merchant, acquiring, or hosted payment-link flows when the user explicitly asks for them.
 
-## Default Behavior
+## Current Execution Model
 
-- Start with `GET /api/me`.
-- Treat wallet balance and card balance as separate values.
-- Use `card.cardId`, not `card.id`, for card routes.
-- Keep buyer-side purchases as the default path. Use merchant and acquiring flows only when explicitly requested.
-- Use the billing address from the sensitive card response. Never invent one.
-- Never retry topups or checkouts blindly. Read state first.
+Use the product in this order:
+
+1. `GET /api/me` for wallet readiness, deposit address, and inbox context.
+2. Prefer `payment_intents` and `subscriptions` for auditable or recurring flows.
+3. Use `GET /api/payment-intents/:intentId/credentials` only when an intent is `card_ready`.
+4. Use legacy `/api/cards/*` routes only for compatibility flows and current one-off direct card checkouts.
+
+Important details:
+
+- hidden subscription cards do not appear in normal `GET /api/me` card fields
+- subscription cards are persistent, merchant-bound, and stay active while the subscription stays active
+- funding should stay bounded: reuse residual allocation first, then top up only the delta you need
+- do not assume one-time hidden task-card issuance exists yet; current one-off buyer-side execution can still rely on legacy direct-card routes
 
 ## Load References When Needed
 
-- Read `references/payment-safety.md` before entering card details on an unfamiliar merchant, when the user asks about phishing or fraud, when a checkout keeps failing, or when verification and retry boundaries matter.
+- Read `references/payment-safety.md` before entering payment details on an unfamiliar merchant, when the user asks about phishing or fraud, when a checkout keeps failing, or when verification and retry boundaries matter.
 - Read `references/acquiring.md` when the user wants to accept payments, create invoices, embed checkout, or work with merchant webhooks.
 
 ## Core Jobs
@@ -76,29 +85,146 @@ curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
 Important fields:
 
 - `balance`: wallet balance
-- `card`: current card object or `null`
-- `cardBalance.availableBalance.value`: card balance when available
 - `depositAddress`: where to send USDT
-- `mailboxAddress`: inbox address for OTP and receipts
+- `mailboxAddress`: inbox address for OTP, receipts, and verification messages
+- `card`: optional legacy compatibility card object, if one still exists
 
-When the user asks for balance, show both wallet and card balance. If `cardBalance` is missing, say card balance is unavailable.
+When the user asks for readiness, report wallet balance first. Mention legacy card balance only if a compatibility card exists and the flow explicitly depends on it.
 
-### 2. Issue a card
+### 2. Create an auditable payment task
+
+```bash
+curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "intentType": "subscription_setup",
+    "approvalMode": "pre_authorized",
+    "merchantName": "OpenAI",
+    "merchantDomain": "openai.com",
+    "expectedAmount": "20.00",
+    "fundingCap": "20.00",
+    "currency": "USD",
+    "metadata": {
+      "serviceName": "ChatGPT Plus"
+    }
+  }' \
+  https://moneyclaw.ai/api/payment-intents
+```
+
+Use payment intents to hold merchant context, approval state, and audit history.
+
+Current intent types:
+
+- `one_time_purchase`
+- `subscription_setup`
+- `subscription_renewal`
+- `merchant_invoice`
+
+Rules:
+
+- use `approval_based` when the user wants a checkpoint
+- use `pre_authorized` only when the user already granted permission for this scope
+- if you only have an API key and the intent is `pending_approval`, stop and ask the user to approve it in the dashboard instead of pretending you can finish approval yourself
+- treat the intent as the source of truth for execution state, not the card
+
+### 3. Create a subscription from an approved setup intent
+
+```bash
+curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "setupIntentId": "intent-uuid",
+    "serviceName": "ChatGPT Plus",
+    "serviceUrl": "https://chatgpt.com",
+    "merchantName": "OpenAI",
+    "merchantDomain": "openai.com",
+    "amount": "20.00",
+    "currency": "USD",
+    "frequency": "monthly",
+    "status": "active"
+  }' \
+  https://moneyclaw.ai/api/subscriptions
+```
+
+Use subscriptions for recurring spend. One subscription should stay bound to one service or merchant.
+
+### 4. Prepare a persistent hidden subscription card
+
+```bash
+curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  https://moneyclaw.ai/api/subscriptions/{subscriptionId}/prepare-card
+```
+
+If the environment has hidden subscription-card preparation enabled:
+
+- MoneyClaw searches merchant data and live BIN analytics when available
+- MoneyClaw prepares a persistent hidden card bound to that subscription
+- the setup intent can move to `card_ready`
+- credentials are then fetched through the setup intent, not through legacy card endpoints
+
+Get the intent-scoped credentials:
+
+```bash
+curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  https://moneyclaw.ai/api/payment-intents/{intentId}/credentials
+```
+
+Rules:
+
+- only call this when the intent is `card_ready`
+- do not treat hidden credentials as a general account-level card surface
+- do not expose PAN or CVV longer than needed for the active checkout
+
+### 5. Run the renewal loop on the same persistent card
+
+List due subscriptions:
+
+```bash
+curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  "https://moneyclaw.ai/api/subscriptions/due?limit=20&offset=0"
+```
+
+Inspect whether the current card still matches the latest merchant-aware recommendation:
+
+```bash
+curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  https://moneyclaw.ai/api/subscriptions/{subscriptionId}/renewal-preflight
+```
+
+Prepare the renewal on the same persistent card:
+
+```bash
+curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  https://moneyclaw.ai/api/subscriptions/{subscriptionId}/prepare-renewal
+```
+
+After the checkout settles, reconcile it back into MoneyClaw's allocation tracking:
+
+```bash
+curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"intentId":"renewal-intent-uuid"}' \
+  https://moneyclaw.ai/api/subscriptions/{subscriptionId}/reconcile
+```
+
+Renewal rules:
+
+- keep the same merchant-bound subscription card unless an operator intentionally rotates it
+- reuse residual hidden-card allocation before topping up more
+- reconcile against the explicit renewal intent once renewal intents exist
+
+### 6. Legacy compatibility flow for one-off direct checkout
+
+Today, one-off buyer-side execution may still rely on legacy direct-card routes.
+
+Issue a compatibility card:
 
 ```bash
 curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   https://moneyclaw.ai/api/cards/issue
 ```
 
-Rules:
-
-- the wallet needs at least the minimum issuance deposit
-- the wallet is loaded onto the new card
-- the issuance fee is charged from the card after issuance
-
-If no card exists and the wallet is funded, issue the card. If the wallet is too small, tell the user to fund the deposit address first.
-
-### 3. Top up the card
+Top up the compatibility card:
 
 ```bash
 curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
@@ -107,68 +233,39 @@ curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   https://moneyclaw.ai/api/cards/{cardId}/topup
 ```
 
-Pre-flight checks:
-
-1. Read `GET /api/me`.
-2. Confirm `card` exists and is active.
-3. Use `card.cardId`.
-4. Confirm wallet balance covers the requested topup.
-5. Only then send the topup request.
-
-Response handling:
-
-- `200`: topup succeeded
-- `202`: topup is still processing; do not send another one yet
-- `400 INSUFFICIENT_BALANCE`: not enough wallet funds
-- `400 CARD_NOT_ACTIVE`: card is not ready
-- `404 NOT_FOUND`: wrong card id
-- `500`: stop, surface the failure, and inspect state before retrying
-
-### 4. Complete authorized checkout and fetch OTP
-
-Get card details:
+Get compatibility-card credentials:
 
 ```bash
 curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   https://moneyclaw.ai/api/cards/{cardId}/sensitive
 ```
 
-Get the latest OTP email:
+Rules:
 
-```bash
-curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  https://moneyclaw.ai/api/inbox/latest-otp
-```
-
-Verify what actually happened:
-
-```bash
-curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  "https://moneyclaw.ai/api/cards/{cardId}/transactions?limit=20&offset=0"
-```
-
-Checkout rules:
-
-- use the sensitive response for PAN, CVV, expiry, and billing address
-- wait 10 to 30 seconds for the OTP email to arrive
-- use `extractedCodes[0]` as the verification code
-- after any merchant error, read transactions before retrying
+- this is a compatibility surface, not the preferred long-term model
+- creating a new visible compatibility card deducts the applicable card-issue fee from wallet balance
+- successful legacy direct-card purchases may also create a separate 2% payment-fee ledger entry
+- use `card.cardId`, not `card.id`, for legacy card routes
+- read transactions before retrying a failed direct-card checkout
 
 ## Payment Execution Rules
 
-- The card is prepaid. The loaded balance is the hard spending limit.
-- Do not expose PAN or CVV longer than needed for the active checkout.
+- The spending model is prepaid. The loaded balance is the hard limit.
 - Before payment, confirm the merchant domain and total amount are correct.
+- Use the billing address returned by MoneyClaw. Never invent one.
+- Wait for the OTP or 3DS email instead of guessing verification codes.
 - Do not retry the same merchant checkout more than twice in one session without user confirmation or clear pre-authorization.
 - If the user asks for a risky or suspicious payment, stop and explain why.
 
-Use `references/payment-safety.md` for the expanded safety, verification, subscription, and retry guidance.
+Use `references/payment-safety.md` for expanded safety, verification, subscription, and retry guidance.
 
 ## Good Default Prompt Shapes
 
-- `Check my MoneyClaw account and tell me if it is ready for a purchase.`
-- `Issue a MoneyClaw card and top it up with $20 if needed. Ask before checkout unless I say this purchase is pre-authorized.`
+- `Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks are ready.`
+- `Create a pre-authorized subscription setup for this service, then prepare the recurring payment flow.`
+- `Inspect this due subscription, run renewal preflight, and prepare the renewal on the existing hidden card if it still matches the recommendation.`
 - `Finish this authorized checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw inbox and verify the final transaction result.`
+- `If this is still a compatibility-only one-off flow, use the legacy direct-card route and keep the credentials scoped to this checkout.`
 
 ## Secondary Capability: Merchant And Acquiring Flows
 
@@ -194,4 +291,10 @@ Use `references/acquiring.md` for setup, invoice lifecycle, widget, webhook veri
 
 ## Scope Note
 
-MoneyClaw supports both buyer-side card purchases and merchant/acquiring flows. Lead with the simpler card-purchase workflow for discovery, then switch to acquiring when the user asks for merchant features.
+MoneyClaw supports three public layers today:
+
+- payment intents for audit and approval
+- subscriptions plus hidden persistent cards for recurring execution
+- legacy direct-card routes for compatibility and current one-off checkout paths
+
+Lead with the first two. Use the third only when the current integration still requires it.

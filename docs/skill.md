@@ -17,6 +17,7 @@ MONEYCLAW_API_KEY
 ## Read The Skill Files
 
 - [moneyclaw-skill/SKILL.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/SKILL.md)
+- [moneyclaw-skill/agents/openai.yaml](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/agents/openai.yaml)
 - [moneyclaw-skill/references/payment-safety.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/references/payment-safety.md)
 - [moneyclaw-skill/references/acquiring.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/references/acquiring.md)
 

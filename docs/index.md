@@ -3,8 +3,8 @@ layout: home
 
 hero:
   name: MoneyClaw
-  text: Payments your OpenClaw agent can actually use.
-  tagline: Give your agent a prepaid wallet, a virtual card, a dedicated OTP and 3DS inbox, and a clear audit trail for real checkout.
+  text: Payments your OpenClaw agent can actually execute safely.
+  tagline: Give your agent a prepaid wallet, auditable payment tasks, hidden merchant-bound subscription cards, and a dedicated OTP and 3DS inbox.
   image:
     src: /crab.png
     alt: MoneyClaw mascot
@@ -20,18 +20,20 @@ hero:
       link: https://moneyclaw.ai
 
 features:
-  - title: Prepaid by default
-    details: Bound spend with separate wallet and card balances, so agent payments stay easier to inspect and control.
-  - title: Built for real checkout
-    details: Issue a card, top it up, complete browser checkout, then verify the final transaction result.
+  - title: Wallet-funded by default
+    details: Keep agent payments prepaid and bounded by the wallet balance you deliberately loaded.
+  - title: Payment tasks first
+    details: Use payment intents as the default execution surface for approval, merchant context, and audit state.
+  - title: Hidden subscription cards
+    details: Recurring subscriptions can run on persistent merchant-bound cards without turning the card into the product object.
   - title: OTP and 3DS inbox
     details: Let the agent fetch verification codes from a dedicated inbox instead of relying on human screenshots or guesswork.
   - title: User-controlled autonomy
     details: Run MoneyClaw in approval-based or pre-authorized mode depending on how much control you want to keep.
-  - title: OpenClaw skill included
-    details: The public skill bundle and reference files are published in this repo so people can inspect exactly what the agent sees.
   - title: Merchant path too
     details: Hosted invoices and merchant flows are supported too, but buyer-side checkout stays the main public entrypoint.
+  - title: OpenClaw skill included
+    details: The public skill bundle and reference files are published in this repo so people can inspect exactly what the agent sees.
 ---
 
 ## What You Can Do Today
@@ -39,8 +41,9 @@ features:
 MoneyClaw is the layer that lets the loop continue:
 
 - check account readiness
-- issue a card
-- top up prepaid funds
+- create a payment task
+- create a subscription for recurring spend
+- prepare a hidden subscription card when the recurring flow needs one
 - complete checkout
 - fetch OTP or 3DS codes
 - verify the final transaction state
@@ -48,7 +51,7 @@ MoneyClaw is the layer that lets the loop continue:
 ## Built For Safe Agent Payments
 
 - prepaid balances keep risk bounded
-- wallet and card history stay separate
+- wallet, payment-task, and subscription history stay inspectable
 - the user chooses approval-based or pre-authorized operation
 - OTP and 3DS stay inside the normal verification flow
 - transaction history stays queryable before retries

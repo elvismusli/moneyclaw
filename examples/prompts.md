@@ -3,13 +3,19 @@
 ## Account Readiness
 
 ```text
-Check my MoneyClaw account, show wallet balance vs card balance, and tell me if it is ready for a purchase.
+Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks are ready.
 ```
 
-## Card Setup
+## Payment Task
 
 ```text
-Issue a MoneyClaw card and top it up with $20 if needed. Ask before checkout unless I say the purchase is pre-authorized.
+Create a pre-authorized payment task for this purchase and keep the amount bounded to the requested total.
+```
+
+## Subscription Setup
+
+```text
+Create a subscription setup for this service, then prepare the recurring payment flow and keep the execution card hidden unless checkout needs credentials.
 ```
 
 ## Checkout
@@ -22,4 +28,10 @@ Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw in
 
 ```text
 Create a hosted invoice for this order and show me the checkout link.
+```
+
+## Compatibility Flow
+
+```text
+If this checkout still depends on the compatibility card path, use the legacy direct-card routes and keep the credentials scoped to this one checkout.
 ```

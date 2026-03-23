@@ -31,13 +31,19 @@ Start a fresh session after install.
 Check my MoneyClaw account and tell me whether it is purchase-ready.
 ```
 
-### 2. Issue a card
+### 2. Create a payment task
 
 ```text
-Issue a MoneyClaw card and top it up with $20 if needed.
+Create a pre-authorized payment task for this purchase and keep the amount bounded to the expected total.
 ```
 
-### 3. Complete checkout
+### 3. For recurring spend, create a subscription
+
+```text
+Turn that approved subscription setup into a recurring subscription and prepare the payment flow for the same service.
+```
+
+### 4. Complete checkout
 
 ```text
 Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw inbox and verify the final transaction status.
@@ -45,7 +51,9 @@ Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw in
 
 ## Mental Model
 
-- wallet balance and card balance are different
-- the card is prepaid
+- wallet funds the execution
+- payment tasks and subscriptions are the main product objects
+- recurring subscriptions can use hidden merchant-bound cards
 - verification codes come through the dedicated inbox
+- legacy direct-card routes still exist, but they are compatibility-only
 - transaction state should be checked before retries

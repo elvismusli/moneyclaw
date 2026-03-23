@@ -18,37 +18,57 @@ Authorization: Bearer $MONEYCLAW_API_KEY
 
 - `GET /me`
 
-Use this first. It returns the current wallet state, card state, mailbox address, and other readiness data.
+Use this first. It returns the current wallet state, mailbox address, compatibility hints, and other readiness data.
 
-### Issue a card
+### Create a payment task
 
-- `POST /cards/issue`
+- `POST /payment-intents`
 
-Creates a prepaid virtual card when the wallet is funded.
+Creates an auditable buyer-side payment task with approval mode, merchant hints, expected amount, and funding boundaries.
 
-### Top up a card
+### Create a subscription
 
-- `POST /cards/{cardId}/topup`
+- `POST /subscriptions`
 
-Loads prepaid funds onto the existing card.
+Creates a recurring-spend resource from an approved `subscription_setup` intent.
 
-### Get card details
+### Prepare a hidden subscription card
 
-- `GET /cards/{cardId}/sensitive`
+- `POST /subscriptions/{subscriptionId}/prepare-card`
 
-Returns PAN, CVV, expiry, and billing address for the active checkout flow.
+Prepares a persistent hidden merchant-bound card when the recurring flow needs execution credentials.
 
-### Check recent transactions
+### Fetch intent-scoped credentials
 
-- `GET /cards/{cardId}/transactions?limit=20&offset=0`
+- `GET /payment-intents/{intentId}/credentials`
 
-Use this to verify what actually happened before retrying a payment.
+Returns execution credentials only after the intent reaches `card_ready`.
+
+### Renewal loop
+
+- `GET /subscriptions/due`
+- `GET /subscriptions/{subscriptionId}/renewal-preflight`
+- `POST /subscriptions/{subscriptionId}/prepare-renewal`
+- `POST /subscriptions/{subscriptionId}/reconcile`
+
+Use this sequence for recurring spend on the same persistent hidden card.
 
 ### Fetch the latest OTP
 
 - `GET /inbox/latest-otp`
 
 Reads the newest OTP or 3DS code from the agent's inbox.
+
+## Compatibility-Only Card Endpoints
+
+These routes still exist for compatibility and some current one-off checkout paths:
+
+- `POST /cards/issue`
+- `POST /cards/{cardId}/topup`
+- `GET /cards/{cardId}/sensitive`
+- `GET /cards/{cardId}/transactions`
+
+Do not lead new integrations with these routes unless the execution path explicitly still depends on direct card credentials.
 
 ## Merchant And Invoice Endpoints
 

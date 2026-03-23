@@ -5,11 +5,11 @@
 <h1 align="center">MoneyClaw</h1>
 
 <p align="center">
-  <strong>Real payments for OpenClaw agents.</strong>
+  <strong>Intent-based payments for OpenClaw agents.</strong>
 </p>
 
 <p align="center">
-  Prepaid wallet. Virtual card. OTP and 3DS inbox. Auditable payment flows.
+  Prepaid wallet. Payment tasks. Hidden subscription cards. OTP and 3DS inbox.
 </p>
 
 <p align="center">
@@ -47,16 +47,22 @@ Internal infrastructure, production runbooks, incidents, security hardening note
 
 ## What MoneyClaw Does
 
-MoneyClaw gives OpenClaw agents a real prepaid wallet and virtual card for online purchases.
+MoneyClaw gives OpenClaw agents a prepaid wallet and an auditable payment-execution layer for online purchases and recurring subscriptions.
 
 With MoneyClaw, an agent can:
 
-- check wallet and card readiness
-- issue a virtual card
-- top up a card with prepaid funds
+- check wallet and inbox readiness
+- create payment tasks
+- create subscriptions for recurring spend
+- prepare hidden merchant-bound subscription cards when execution needs them
 - complete browser checkout
 - fetch OTP or 3DS codes from a dedicated inbox
 - verify the final transaction result
+
+Compatibility note:
+
+- legacy direct-card routes still exist for compatibility and some current one-off checkout flows
+- they are no longer the preferred public integration model
 
 Secondary workflows include:
 
@@ -82,7 +88,7 @@ Then:
 Starter prompt:
 
 ```text
-Check my MoneyClaw account, show wallet balance vs card balance, and tell me if it is ready for a purchase.
+Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks are ready.
 ```
 
 ## Safety Model
@@ -90,7 +96,8 @@ Check my MoneyClaw account, show wallet balance vs card balance, and tell me if 
 MoneyClaw is built around bounded, inspectable agent payments.
 
 - prepaid balances keep risk capped
-- wallet and card history stay separate
+- payment tasks and subscriptions hold approval and audit state
+- hidden execution cards stay scoped to the payment flow that needs them
 - OTP and 3DS verification flows use a dedicated inbox
 - the user can operate in approval-based or pre-authorized mode
 

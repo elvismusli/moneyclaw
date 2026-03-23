@@ -5,6 +5,7 @@ This directory contains the public OpenClaw skill bundle for MoneyClaw.
 Start with:
 
 - [SKILL.md](./SKILL.md)
+- [agents/openai.yaml](./agents/openai.yaml)
 - [references/payment-safety.md](./references/payment-safety.md)
 - [references/acquiring.md](./references/acquiring.md)
 

@@ -5,7 +5,8 @@ MoneyClaw is the payment layer for OpenClaw agents.
 It gives an agent:
 
 - a prepaid wallet
-- a virtual card
+- payment tasks
+- recurring subscriptions
 - a dedicated OTP and 3DS inbox
 - queryable transaction history
 
@@ -26,8 +27,15 @@ It gives an agent:
 ## First Prompt
 
 ```text
-Check my MoneyClaw account, show wallet balance vs card balance, and tell me if it is ready for a purchase.
+Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks are ready.
 ```
+
+## Execution Model
+
+- use payment tasks as the default buyer-side object
+- use subscriptions for recurring spend
+- treat hidden execution cards as system-managed infrastructure, not as the main user-facing object
+- use legacy direct-card routes only when a compatibility checkout still depends on them
 
 ## Public Surfaces
 

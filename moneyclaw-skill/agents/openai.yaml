@@ -1,0 +1,7 @@
+interface:
+  display_name: "MoneyClaw"
+  short_description: "Prepaid wallet, payment tasks, hidden subscription cards, and OTP inbox for authorized online purchases"
+  default_prompt: "Use $moneyclaw to check wallet readiness, create a payment task or subscription, prepare the needed payment credentials, complete an authorized checkout, fetch OTP/3DS codes, and verify the final payment result. Use legacy direct-card routes only when the integration still depends on the compatibility flow."
+
+policy:
+  allow_implicit_invocation: true

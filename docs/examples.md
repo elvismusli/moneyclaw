@@ -5,19 +5,31 @@
 ### Account Readiness
 
 ```text
-Check my MoneyClaw account, show wallet balance vs card balance, and tell me if it is ready for a purchase.
+Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks are ready.
 ```
 
-### Card Setup
+### Create A Payment Task
 
 ```text
-Issue a MoneyClaw card and top it up with $20 if needed. Ask before checkout unless I say the purchase is pre-authorized.
+Create a pre-authorized payment task for this purchase and keep the amount bounded to the requested total.
+```
+
+### Prepare A Subscription
+
+```text
+Create a subscription setup for this service, then prepare the recurring payment flow and keep the execution card hidden unless checkout needs credentials.
 ```
 
 ### Checkout
 
 ```text
 Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw inbox and verify the final transaction result.
+```
+
+### Compatibility One-Off Flow
+
+```text
+If this checkout still depends on the compatibility card flow, use the legacy direct-card routes and keep the credentials scoped to this one checkout only.
 ```
 
 ## Curl
@@ -29,12 +41,14 @@ curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   https://moneyclaw.ai/api/me
 ```
 
-### Issue A Card
+### Create A Payment Task
 
 ```bash
 curl -X POST \
   -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  https://moneyclaw.ai/api/cards/issue
+  -H "Content-Type: application/json" \
+  -d '{"intentType":"subscription_setup","approvalMode":"pre_authorized","merchantName":"OpenAI","merchantDomain":"openai.com","expectedAmount":"20.00","fundingCap":"20.00","currency":"USD"}' \
+  https://moneyclaw.ai/api/payment-intents
 ```
 
 ### Fetch Latest OTP

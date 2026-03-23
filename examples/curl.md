@@ -7,22 +7,14 @@ curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   https://moneyclaw.ai/api/me
 ```
 
-## Issue A Card
-
-```bash
-curl -X POST \
-  -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  https://moneyclaw.ai/api/cards/issue
-```
-
-## Top Up A Card
+## Create A Payment Task
 
 ```bash
 curl -X POST \
   -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"amount": 10, "currency": "USD"}' \
-  https://moneyclaw.ai/api/cards/{cardId}/topup
+  -d '{"intentType":"subscription_setup","approvalMode":"pre_authorized","merchantName":"OpenAI","merchantDomain":"openai.com","expectedAmount":"20.00","fundingCap":"20.00","currency":"USD"}' \
+  https://moneyclaw.ai/api/payment-intents
 ```
 
 ## Fetch Latest OTP
@@ -32,9 +24,10 @@ curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   https://moneyclaw.ai/api/inbox/latest-otp
 ```
 
-## Verify Transactions
+## Compatibility-Only Card Flow
 
 ```bash
-curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  "https://moneyclaw.ai/api/cards/{cardId}/transactions?limit=20&offset=0"
+curl -X POST \
+  -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
+  https://moneyclaw.ai/api/cards/issue
 ```

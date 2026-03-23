@@ -5,20 +5,20 @@ const base = process.env.DOCS_BASE ?? '/moneyclaw/';
 
 export default defineConfig({
   title: 'MoneyClaw',
-  description: 'Real payments for OpenClaw agents.',
+  description: 'Payment tasks, subscriptions, and hidden execution cards for OpenClaw agents.',
   base,
   cleanUrls: true,
   lastUpdated: true,
   head: [
     ['link', { rel: 'icon', href: `${base}crab.png` }],
     ['meta', { property: 'og:title', content: 'MoneyClaw' }],
-    ['meta', { property: 'og:description', content: 'Real payments for OpenClaw agents.' }],
+    ['meta', { property: 'og:description', content: 'Payment tasks, subscriptions, and hidden execution cards for OpenClaw agents.' }],
     ['meta', { property: 'og:type', content: 'website' }],
     ['meta', { property: 'og:url', content: `${siteUrl}/` }],
     ['meta', { property: 'og:image', content: `${siteUrl}/og-docs.png` }],
     ['meta', { property: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { property: 'twitter:title', content: 'MoneyClaw' }],
-    ['meta', { property: 'twitter:description', content: 'Real payments for OpenClaw agents.' }],
+    ['meta', { property: 'twitter:description', content: 'Payment tasks, subscriptions, and hidden execution cards for OpenClaw agents.' }],
     ['meta', { property: 'twitter:image', content: `${siteUrl}/og-docs.png` }],
     ['meta', { name: 'theme-color', content: '#ef6a3b' }],
   ],

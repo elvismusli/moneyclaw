@@ -9,7 +9,8 @@ The goal is not to make payments invisible. The goal is to make real payments bo
 - prepaid by default
 - bounded spend
 - explicit user authorization or pre-authorization
-- visible wallet and card history
+- visible wallet, payment-task, and subscription history
+- hidden execution cards rather than card-as-product-object
 - dedicated OTP and 3DS inbox
 
 ## What MoneyClaw Is For
@@ -28,7 +29,7 @@ MoneyClaw is not a tool for:
 
 ## Safe Default Behavior
 
-- inspect wallet and card state before acting
+- inspect wallet, payment-task, and subscription state before acting
 - keep spending prepaid and task-scoped
 - use OTP and 3DS only as part of the normal verification flow
 - inspect final transaction state before retrying
