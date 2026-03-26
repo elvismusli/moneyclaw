@@ -25,12 +25,3 @@ curl -X POST \
 curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   https://moneyclaw.ai/api/inbox/latest-otp
 ```
-
-## Compatibility-Only Card Flow
-
-```bash
-curl -X POST \
-  -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  -H "X-MoneyClaw-Compatibility-Mode: visible-card" \
-  https://moneyclaw.ai/api/cards/issue
-```

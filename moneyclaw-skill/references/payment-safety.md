@@ -50,8 +50,8 @@ Run this checklist before entering card details:
 Common guidance:
 
 - `INSUFFICIENT_BALANCE`: top up or reduce purchase amount
-- `CARD_NOT_ACTIVE`: card is not ready yet
-- merchant-side error with no clear payment result: read `/api/cards/{cardId}/transactions` with `X-MoneyClaw-Compatibility-Mode: visible-card` before trying again
+- `CARD_NOT_ACTIVE`: the current execution credentials are not ready yet
+- merchant-side error with no clear payment result: inspect MoneyClaw intent or subscription state before trying again
 
 ## 4. Subscription And Currency Traps
 

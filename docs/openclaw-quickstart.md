@@ -55,5 +55,5 @@ Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw in
 - payment tasks and subscriptions are the main product objects
 - recurring subscriptions can use hidden merchant-bound cards
 - verification codes come through the dedicated inbox
-- legacy direct-card routes still exist, but they are compatibility-only
+- cards stay behind the system-managed execution layer instead of appearing as the main public integration object
 - transaction state should be checked before retries

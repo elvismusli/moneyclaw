@@ -18,7 +18,7 @@ Authorization: Bearer $MONEYCLAW_API_KEY
 
 - `GET /me`
 
-Use this first. It returns the current wallet state, mailbox address, compatibility hints, and other readiness data.
+Use this first. It returns the current wallet state, mailbox address, deposit context, and other readiness data.
 Agents should read `mailboxAddress` from this response instead of hardcoding an inbox domain.
 
 ### Create a payment task
@@ -59,23 +59,6 @@ Use this sequence for recurring spend on the same persistent hidden card.
 - `GET /inbox/latest-otp`
 
 Reads the newest OTP or 3DS code from the agent's inbox.
-
-## Compatibility-Only Card Endpoints
-
-These routes still exist for compatibility and some current one-off checkout paths:
-
-- `POST /cards/issue`
-- `POST /cards/{cardId}/topup`
-- `GET /cards/{cardId}/sensitive`
-- `GET /cards/{cardId}/transactions`
-
-Every legacy `/cards/*` request must include:
-
-```text
-X-MoneyClaw-Compatibility-Mode: visible-card
-```
-
-Do not lead new integrations with these routes unless the execution path explicitly still depends on direct card credentials.
 
 ## Merchant And Invoice Endpoints
 

@@ -26,12 +26,6 @@ Create a subscription setup for this service, then prepare the recurring payment
 Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw inbox and verify the final transaction result.
 ```
 
-### Compatibility One-Off Flow
-
-```text
-If this checkout still depends on the compatibility card flow, use the legacy direct-card routes and keep the credentials scoped to this one checkout only.
-```
-
 ## Curl
 
 ### Check Account

@@ -29,9 +29,3 @@ Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw in
 ```text
 Create a hosted invoice for this order and show me the checkout link.
 ```
-
-## Compatibility Flow
-
-```text
-If this checkout still depends on the compatibility card path, use the legacy direct-card routes and keep the credentials scoped to this one checkout.
-```

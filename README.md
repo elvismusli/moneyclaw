@@ -59,10 +59,10 @@ With MoneyClaw, an agent can:
 - fetch OTP or 3DS codes from a dedicated inbox
 - verify the final transaction result
 
-Compatibility note:
+Execution note:
 
-- legacy direct-card routes still exist for compatibility and some current one-off checkout flows
-- they are no longer the preferred public integration model
+- cards are internal execution artifacts, not the main public product object
+- public integrations should lead with wallet, payment tasks, subscriptions, inbox, and merchant flows
 
 Secondary workflows include:
 

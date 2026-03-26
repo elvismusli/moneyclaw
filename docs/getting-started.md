@@ -35,7 +35,7 @@ Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks a
 - use payment tasks as the default buyer-side object
 - use subscriptions for recurring spend
 - treat hidden execution cards as system-managed infrastructure, not as the main user-facing object
-- use legacy direct-card routes only when a compatibility checkout still depends on them
+- do not model the product around user-facing card issuance or exposed account-level credentials
 
 ## Public Surfaces
 

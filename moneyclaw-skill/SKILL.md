@@ -59,14 +59,13 @@ Use the product in this order:
 1. `GET /api/me` for wallet readiness, deposit address, and inbox context.
 2. Prefer `payment_intents` and `subscriptions` for auditable or recurring flows.
 3. Use `GET /api/payment-intents/:intentId/credentials` only when an intent is `card_ready`.
-4. Use legacy `/api/cards/*` routes only for compatibility flows and current one-off direct card checkouts.
 
 Important details:
 
-- hidden subscription cards do not appear in normal `GET /api/me` card fields
+- hidden subscription cards do not appear in normal `GET /api/me`
 - subscription cards are persistent, merchant-bound, and stay active while the subscription stays active
 - funding should stay bounded: reuse residual allocation first, then top up only the delta you need
-- do not assume one-time hidden task-card issuance exists yet; current one-off buyer-side execution can still rely on legacy direct-card routes
+- cards are internal execution artifacts, not a normal account-level API surface
 
 ## Load References When Needed
 
@@ -87,9 +86,8 @@ Important fields:
 - `balance`: wallet balance
 - `depositAddress`: where to send USDT
 - `mailboxAddress`: inbox address for OTP, receipts, and verification messages
-- `legacyCompatibilityCardPresent` and `legacyCompatibilityCardStatus`: hints that an older visible compatibility card still exists
 
-When the user asks for readiness, report wallet balance first. Mention legacy visible-card state only if a compatibility card exists and the flow explicitly depends on it.
+When the user asks for readiness, report wallet balance, deposit address, inbox state, and whether payment tasks or subscriptions can proceed.
 
 ### 2. Create an auditable payment task
 
@@ -213,45 +211,6 @@ Renewal rules:
 - reuse residual hidden-card allocation before topping up more
 - reconcile against the explicit renewal intent once renewal intents exist
 
-### 6. Legacy compatibility flow for one-off direct checkout
-
-Today, one-off buyer-side execution may still rely on legacy direct-card routes.
-
-Issue a compatibility card:
-
-```bash
-curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  -H "X-MoneyClaw-Compatibility-Mode: visible-card" \
-  https://moneyclaw.ai/api/cards/issue
-```
-
-Top up the compatibility card:
-
-```bash
-curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  -H "X-MoneyClaw-Compatibility-Mode: visible-card" \
-  -H "Content-Type: application/json" \
-  -d '{"amount": 10, "currency": "USD"}' \
-  https://moneyclaw.ai/api/cards/{cardId}/topup
-```
-
-Get compatibility-card credentials:
-
-```bash
-curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  -H "X-MoneyClaw-Compatibility-Mode: visible-card" \
-  https://moneyclaw.ai/api/cards/{cardId}/sensitive
-```
-
-Rules:
-
-- this is a compatibility surface, not the preferred long-term model
-- every legacy `/api/cards/*` request must include `X-MoneyClaw-Compatibility-Mode: visible-card`
-- creating a new visible compatibility card deducts the applicable card-issue fee from wallet balance
-- successful legacy direct-card purchases may also create a separate 2% payment-fee ledger entry
-- direct-card identifiers no longer come from normal `/api/me`; treat them as explicit compatibility-only inputs
-- read transactions before retrying a failed direct-card checkout
-
 ## Payment Execution Rules
 
 - The spending model is prepaid. The loaded balance is the hard limit.
@@ -269,7 +228,6 @@ Use `references/payment-safety.md` for expanded safety, verification, subscripti
 - `Create a pre-authorized subscription setup for this service, then prepare the recurring payment flow.`
 - `Inspect this due subscription, run renewal preflight, and prepare the renewal on the existing hidden card if it still matches the recommendation.`
 - `Finish this authorized checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw inbox and verify the final transaction result.`
-- `If this is still a compatibility-only one-off flow, use the legacy direct-card route and keep the credentials scoped to this checkout.`
 
 ## Secondary Capability: Merchant And Acquiring Flows
 
@@ -299,6 +257,6 @@ MoneyClaw supports three public layers today:
 
 - payment intents for audit and approval
 - subscriptions plus hidden persistent cards for recurring execution
-- legacy direct-card routes for compatibility and current one-off checkout paths
+- merchant and acquiring flows when the user explicitly wants to collect payments
 
-Lead with the first two. Use the third only when the current integration still requires it.
+Lead with the first two.
