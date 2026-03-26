@@ -9,7 +9,7 @@ Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks a
 ## Payment Task
 
 ```text
-Create a pre-authorized payment task for this purchase and keep the amount bounded to the requested total.
+Create an approval-based payment task for this purchase and keep the amount bounded to the requested total.
 ```
 
 ## Subscription Setup
@@ -21,7 +21,7 @@ Create a subscription setup for this service, then prepare the recurring payment
 ## Checkout
 
 ```text
-Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw inbox and verify the final transaction result.
+Continue this already approved checkout and, if 3DS appears, retrieve the latest verification message from MoneyClaw inbox and verify the final transaction result.
 ```
 
 ## Merchant Flow

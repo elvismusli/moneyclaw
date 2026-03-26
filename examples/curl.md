@@ -15,7 +15,7 @@ Read `mailboxAddress` from this response instead of hardcoding an inbox domain.
 curl -X POST \
   -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"intentType":"subscription_setup","approvalMode":"pre_authorized","merchantName":"OpenAI","merchantDomain":"openai.com","expectedAmount":"20.00","fundingCap":"20.00","currency":"USD"}' \
+  -d '{"intentType":"subscription_setup","approvalMode":"approval_based","merchantName":"OpenAI","merchantDomain":"openai.com","expectedAmount":"20.00","fundingCap":"20.00","currency":"USD"}' \
   https://moneyclaw.ai/api/payment-intents
 ```
 

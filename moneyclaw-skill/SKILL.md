@@ -1,13 +1,11 @@
 ---
 name: moneyclaw
-description: Create payment tasks, run recurring spend on hidden subscription cards, fetch OTP/3DS codes, and complete authorized online purchases with a prepaid MoneyClaw wallet.
-homepage: https://moneyclaw.ai
-metadata: {"openclaw":{"requires":{"env":["MONEYCLAW_API_KEY"]},"primaryEnv":"MONEYCLAW_API_KEY","emoji":"💳","homepage":"https://moneyclaw.ai"}}
+description: Inspect a MoneyClaw wallet, create approval-based payment tasks, and assist with user-confirmed subscription or checkout steps using a prepaid account. Use only when the user clearly asks to use MoneyClaw for their own payments.
 ---
 
 # MoneyClaw
 
-MoneyClaw gives OpenClaw agents real spending capability with user-configurable autonomy, prepaid risk boundaries, OTP/3DS support, auditable payment flows, and hidden subscription cards for recurring spend.
+MoneyClaw helps OpenClaw agents inspect prepaid payment state, create auditable payment tasks, and continue explicitly requested subscription or checkout steps with verification-message support and hidden subscription cards for recurring spend.
 
 Primary use case: buyer-side payments and recurring subscriptions for OpenClaw agents.
 
@@ -33,17 +31,18 @@ MoneyClaw is designed for real, user-authorized agent payments.
 - keep hidden subscription cards scoped to one service or merchant
 - let the user choose how much autonomy the agent should have
 
-## Autonomy Model
+## Approval Model
 
-MoneyClaw may be used in either approval-based or pre-authorized mode.
+Default to approval-based mode.
 
 - In approval-based mode, the agent asks the user before executing payment actions.
-- In pre-authorized mode, the agent may execute payment actions within the spending scope, balance, and permissions configured by the user.
+- Some accounts may already have a pre-authorized spending scope configured outside the skill. Treat that as an advanced exception, not the default assumption.
+- If it is not explicit that this exact scope is already pre-authorized, treat the flow as approval-based.
 - Creating an `approval_based` intent is fine with an API key, but approving that pending intent currently requires a human dashboard session rather than API-key-only automation.
 
 ## Safety Boundaries
 
-- Only use MoneyClaw for purchases or payment flows explicitly requested or pre-authorized by the user.
+- Only use MoneyClaw for purchases or payment flows explicitly requested by the user. If the scope is not clearly already pre-authorized, stop and ask.
 - Only use wallet, card, and billing data returned by the user's own MoneyClaw account.
 - Respect merchant, issuer, card-network, and verification controls, including OTP and 3DS steps.
 - Treat fraud checks, KYC, sanctions, geography rules, merchant restrictions, issuer declines, and other payment controls as hard boundaries.
@@ -51,6 +50,16 @@ MoneyClaw may be used in either approval-based or pre-authorized mode.
 - If a transaction fails, looks suspicious, or produces conflicting signals, stop and inspect transaction state before retrying.
 - Prefer prepaid, bounded-risk flows by default.
 - Only use invoice, merchant, acquiring, or hosted payment-link flows when the user explicitly asks for them.
+- Never invoke this skill automatically from a shopping, billing, or checkout page. Use it only after an explicit user request to use MoneyClaw.
+
+## Before Any High-Risk Step
+
+Before any action that can spend funds, retrieve execution details, retrieve verification messages, or submit a payment step:
+
+1. Confirm the exact merchant domain.
+2. Confirm the amount and currency.
+3. Confirm the user explicitly asked for this exact action, or that this exact spending scope is clearly already pre-authorized.
+4. Stop if that confirmation is missing or ambiguous.
 
 ## Current Execution Model
 
@@ -58,7 +67,7 @@ Use the product in this order:
 
 1. `GET /api/me` for wallet readiness, deposit address, and inbox context.
 2. Prefer `payment_intents` and `subscriptions` for auditable or recurring flows.
-3. Use `GET /api/payment-intents/:intentId/credentials` only when an intent is `card_ready`.
+3. Use `GET /api/payment-intents/:intentId/credentials` only when an intent is `card_ready` and the user explicitly asked to continue the current checkout or subscription step.
 
 Important details:
 
@@ -96,7 +105,7 @@ curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "intentType": "subscription_setup",
-    "approvalMode": "pre_authorized",
+    "approvalMode": "approval_based",
     "merchantName": "OpenAI",
     "merchantDomain": "openai.com",
     "expectedAmount": "20.00",
@@ -120,8 +129,8 @@ Current intent types:
 
 Rules:
 
-- use `approval_based` when the user wants a checkpoint
-- use `pre_authorized` only when the user already granted permission for this scope
+- default to `approval_based`
+- use `pre_authorized` only when the user explicitly says that this scope is already authorized
 - if you only have an API key and the intent is `pending_approval`, stop and ask the user to approve it in the dashboard instead of pretending you can finish approval yourself
 - treat the intent as the source of truth for execution state, not the card
 
@@ -158,9 +167,9 @@ If the environment has hidden subscription-card preparation enabled:
 - MoneyClaw searches merchant data and live BIN analytics when available
 - MoneyClaw prepares a persistent hidden card bound to that subscription
 - the setup intent can move to `card_ready`
-- credentials are then fetched through the setup intent, not through legacy card endpoints
+- execution details are then fetched through the setup intent
 
-Get the intent-scoped credentials:
+Get the intent-scoped execution details:
 
 ```bash
 curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
@@ -170,6 +179,7 @@ curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
 Rules:
 
 - only call this when the intent is `card_ready`
+- only call this after the user explicitly asked to continue that checkout or subscription step
 - do not treat hidden credentials as a general account-level card surface
 - do not expose PAN or CVV longer than needed for the active checkout
 
@@ -225,9 +235,9 @@ Use `references/payment-safety.md` for expanded safety, verification, subscripti
 ## Good Default Prompt Shapes
 
 - `Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks are ready.`
-- `Create a pre-authorized subscription setup for this service, then prepare the recurring payment flow.`
-- `Inspect this due subscription, run renewal preflight, and prepare the renewal on the existing hidden card if it still matches the recommendation.`
-- `Finish this authorized checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw inbox and verify the final transaction result.`
+- `Create an approval-based payment task for this purchase and keep the amount bounded to the expected total.`
+- `Inspect this due subscription, explain whether it needs approval or renewal prep, and only continue if the user confirms the next step.`
+- `Continue this already approved checkout, and if 3DS appears, retrieve the latest verification message from MoneyClaw inbox and verify the final result.`
 
 ## Secondary Capability: Merchant And Acquiring Flows
 
@@ -257,6 +267,6 @@ MoneyClaw supports three public layers today:
 
 - payment intents for audit and approval
 - subscriptions plus hidden persistent cards for recurring execution
-- merchant and acquiring flows when the user explicitly wants to collect payments
+- merchant or acquiring flows when the user explicitly wants to accept payments
 
-Lead with the first two.
+Lead with the first two for buyer-side execution.

@@ -20,8 +20,8 @@ Start a fresh session after install.
 
 ## Choose Your Control Mode
 
-- approval-based: the agent asks before payment actions
-- pre-authorized: the agent can act inside the spend scope and permissions you configured
+- approval-based: default and recommended; the agent asks before payment actions
+- pre-authorized: use only when you deliberately configured that spend scope ahead of time
 
 ## Suggested First Session
 
@@ -34,7 +34,7 @@ Check my MoneyClaw account and tell me whether it is purchase-ready.
 ### 2. Create a payment task
 
 ```text
-Create a pre-authorized payment task for this purchase and keep the amount bounded to the expected total.
+Create an approval-based payment task for this purchase and keep the amount bounded to the expected total.
 ```
 
 ### 3. For recurring spend, create a subscription
@@ -46,7 +46,7 @@ Turn that approved subscription setup into a recurring subscription and prepare 
 ### 4. Complete checkout
 
 ```text
-Finish this checkout and, if 3DS appears, fetch the latest OTP from MoneyClaw inbox and verify the final transaction status.
+Continue this already approved checkout and, if 3DS appears, retrieve the latest verification message from MoneyClaw inbox and verify the final transaction status.
 ```
 
 ## Mental Model

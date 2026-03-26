@@ -8,14 +8,14 @@ The goal is not to make payments invisible. The goal is to make real payments bo
 
 - prepaid by default
 - bounded spend
-- explicit user authorization or pre-authorization
+- explicit user approval by default, with optional pre-authorized scopes configured ahead of time
 - visible wallet, payment-task, and subscription history
 - hidden execution cards rather than card-as-product-object
 - dedicated OTP and 3DS inbox
 
 ## What MoneyClaw Is For
 
-MoneyClaw is for real purchases and payment flows requested or pre-authorized by the user.
+MoneyClaw is for real purchases and payment flows requested or approved by the user. Some accounts may also use narrowly scoped pre-authorized operation that was configured ahead of time.
 
 ## What MoneyClaw Is Not For
 

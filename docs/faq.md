@@ -12,9 +12,9 @@ Because MoneyClaw has internal infrastructure, incident history, production runb
 
 Yes. The public docs and skill are intentionally honest about that. The safety boundary is about user authorization and prepaid limits, not pretending the product is read-only.
 
-## Does MoneyClaw support autonomous mode?
+## Does MoneyClaw support pre-authorized operation?
 
-Yes. The user can choose approval-based or pre-authorized operation, depending on their preferred level of control.
+Yes, but approval-based operation is the default. Pre-authorized execution should be treated as an advanced mode that the user deliberately configures ahead of time for a specific spending scope.
 
 ## Are merchant flows supported?
 

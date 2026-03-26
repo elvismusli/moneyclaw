@@ -4,7 +4,7 @@ layout: home
 hero:
   name: MoneyClaw
   text: Payments your OpenClaw agent can actually execute safely.
-  tagline: Give your agent a prepaid wallet, auditable payment tasks, hidden merchant-bound subscription cards, and a dedicated OTP and 3DS inbox.
+  tagline: Give your agent a prepaid wallet, auditable payment tasks, hidden merchant-bound subscription cards, and a dedicated verification inbox for user-approved payment flows.
   image:
     src: /crab.png
     alt: MoneyClaw mascot
@@ -28,8 +28,8 @@ features:
     details: Recurring subscriptions can run on persistent merchant-bound cards without turning the card into the product object.
   - title: OTP and 3DS inbox
     details: Let the agent fetch verification codes from a dedicated inbox instead of relying on human screenshots or guesswork.
-  - title: User-controlled autonomy
-    details: Run MoneyClaw in approval-based or pre-authorized mode depending on how much control you want to keep.
+  - title: Approval-first control
+    details: Use approval-based flows by default. Enable pre-authorized execution only when you deliberately configure that scope ahead of time.
   - title: Merchant path too
     details: Hosted invoices and merchant flows are supported too, but buyer-side checkout stays the main public entrypoint.
   - title: OpenClaw skill included
@@ -44,15 +44,15 @@ MoneyClaw is the layer that lets the loop continue:
 - create a payment task
 - create a subscription for recurring spend
 - prepare a hidden subscription card when the recurring flow needs one
-- complete checkout
-- fetch OTP or 3DS codes
+- continue an already approved checkout step
+- retrieve verification messages when the user asks to proceed
 - verify the final transaction state
 
 ## Built For Safe Agent Payments
 
 - prepaid balances keep risk bounded
 - wallet, payment-task, and subscription history stay inspectable
-- the user chooses approval-based or pre-authorized operation
+- approval-based operation is the safe default
 - OTP and 3DS stay inside the normal verification flow
 - transaction history stays queryable before retries
 
