@@ -19,6 +19,7 @@ Authorization: Bearer $MONEYCLAW_API_KEY
 - `GET /me`
 
 Use this first. It returns the current wallet state, mailbox address, compatibility hints, and other readiness data.
+Agents should read `mailboxAddress` from this response instead of hardcoding an inbox domain.
 
 ### Create a payment task
 
@@ -67,6 +68,12 @@ These routes still exist for compatibility and some current one-off checkout pat
 - `POST /cards/{cardId}/topup`
 - `GET /cards/{cardId}/sensitive`
 - `GET /cards/{cardId}/transactions`
+
+Every legacy `/cards/*` request must include:
+
+```text
+X-MoneyClaw-Compatibility-Mode: visible-card
+```
 
 Do not lead new integrations with these routes unless the execution path explicitly still depends on direct card credentials.
 

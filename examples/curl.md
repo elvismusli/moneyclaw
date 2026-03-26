@@ -7,6 +7,8 @@ curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   https://moneyclaw.ai/api/me
 ```
 
+Read `mailboxAddress` from this response instead of hardcoding an inbox domain.
+
 ## Create A Payment Task
 
 ```bash
