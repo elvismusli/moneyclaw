@@ -18,7 +18,7 @@ Use this reference when:
 
 Follow these rules for every MoneyClaw payment flow:
 
-- only use MoneyClaw for purchases or payment flows explicitly requested by the user; if a flow is not clearly already approved or pre-authorized, stop and ask
+- only use MoneyClaw for purchases or payment flows explicitly requested by the user; if the account is not clearly configured for agent auto-approval and the next step is not explicitly requested, stop and ask
 - only use wallet, card, and billing data returned by the user's own MoneyClaw account
 - respect merchant, issuer, card-network, and verification controls
 - treat fraud checks, KYC, sanctions, geography rules, merchant restrictions, issuer declines, and other payment controls as hard boundaries
@@ -30,7 +30,7 @@ Follow these rules for every MoneyClaw payment flow:
 Run this checklist before entering card details:
 
 1. Verify the exact domain. In `paypal.com.secure-verify.net`, the real domain is `secure-verify.net`.
-2. Confirm the user explicitly asked to continue this exact payment step, unless that exact scope is already clearly pre-authorized.
+2. Confirm the user explicitly asked to continue this exact payment step, unless the account is clearly configured to auto-approve agent-created payment tasks for this scope.
 3. Confirm HTTPS is present, but do not treat HTTPS alone as proof of legitimacy.
 4. Confirm the total amount and currency.
 5. Confirm wallet or prepared execution balance covers the amount plus a small buffer.
@@ -62,4 +62,4 @@ Stop and ask the user if any of these are true:
 - the amount, currency, or merchant domain no longer matches the expected purchase
 - the merchant or issuer decline appears related to compliance, sanctions, geography, or merchant policy
 - the checkout asks for contact or identity information that is not already present in the user's account data
-- you are no longer sure the flow is within the user's requested, approved, or pre-authorized scope
+- you are no longer sure the flow is within the user's requested or account-configured auto-approved scope

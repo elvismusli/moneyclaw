@@ -1,6 +1,6 @@
 ---
 name: moneyclaw
-description: Inspect a MoneyClaw wallet, create approval-based payment tasks, and continue user-confirmed payment steps using a prepaid account. Use only when the user clearly asks to use MoneyClaw for their own payments.
+description: Inspect a MoneyClaw wallet, create bounded payment tasks, and continue user-confirmed payment steps using a prepaid account. Use only when the user clearly asks to use MoneyClaw for their own payments.
 metadata:
   openclaw:
     homepage: https://moneyclaw.ai/openclaw
@@ -37,16 +37,16 @@ MoneyClaw is designed for real, user-authorized agent payments.
 
 ## Approval Model
 
-Default to approval-based mode.
+Default to dashboard approval unless the account has explicitly enabled agent auto-approval.
 
-- In approval-based mode, the agent asks the user before executing payment actions.
-- Some accounts may already have a pre-authorized spending scope configured outside the skill. Treat that as an advanced exception, not the default assumption.
-- If it is not explicit that this exact scope is already pre-authorized, treat the flow as approval-based.
-- Creating an `approval_based` intent is fine with an API key, but approving that pending intent currently requires a human dashboard session rather than API-key-only automation.
+- MoneyClaw accounts expose an account-level `agentAutoApproveEnabled` flag through `GET /api/me`.
+- When that flag is off, API-key-created payment tasks wait for dashboard approval before spending.
+- When that flag is on, API-key-created payment tasks can be auto-approved within the merchant and amount scope of the task.
+- Do not assume agent auto-approval is enabled unless the account state confirms it.
 
 ## Safety Boundaries
 
-- Only use MoneyClaw for purchases or payment flows explicitly requested by the user. If the scope is not clearly already pre-authorized, stop and ask.
+- Only use MoneyClaw for purchases or payment flows explicitly requested by the user. If the account is not clearly configured for agent auto-approval and the user has not explicitly asked for the next payment step, stop and ask.
 - Only use wallet, card, and billing data returned by the user's own MoneyClaw account.
 - Respect merchant, issuer, card-network, and verification controls.
 - Treat fraud checks, KYC, sanctions, geography rules, merchant restrictions, issuer declines, and other payment controls as hard boundaries.
@@ -61,7 +61,7 @@ Before any action that can spend funds, retrieve execution details, retrieve ver
 
 1. Confirm the exact merchant domain.
 2. Confirm the amount and currency.
-3. Confirm the user explicitly asked for this exact action, or that this exact spending scope is clearly already pre-authorized.
+3. Confirm the user explicitly asked for this exact action, or that the account is clearly configured for agent auto-approval for this scope.
 4. Stop if that confirmation is missing or ambiguous.
 
 ## Default Buyer Flow
@@ -69,8 +69,8 @@ Before any action that can spend funds, retrieve execution details, retrieve ver
 Use the product in this order:
 
 1. `GET /api/me` for wallet readiness, deposit address, and inbox context. Fresh accounts may also finish mailbox, deposit-address, and provider setup on this first authenticated read.
-2. `POST /api/payment-intents` with `approval_based` for the exact purchase.
-3. Wait for approval or a ready state on that payment task. Approved one-time tasks can auto-prepare a hidden execution card when wallet funding is available and the task cap can cover the selected BIN requirement.
+2. `POST /api/payment-intents` for the exact purchase.
+3. If `agentAutoApproveEnabled` is off, wait for dashboard approval. If it is on, the API-key task can move directly toward `approved` and `card_ready`. Approved one-time tasks can auto-prepare a hidden execution card when wallet funding is available and the task cap can cover the selected BIN requirement.
 4. Use `GET /api/payment-intents/:intentId/credentials` only when the task is `card_ready` and the user explicitly asked to continue the current payment step.
 5. Read `GET /api/inbox/latest-otp` only if the checkout explicitly asks for a verification code and the user asked to proceed.
 6. After a successful one-time checkout, use `POST /api/payment-intents/:intentId/reconcile` to write the settled charge back into MoneyClaw accounting.
@@ -94,6 +94,7 @@ Important fields:
 - `balance`: wallet balance
 - `depositAddress`: where to send USDT
 - `mailboxAddress`: inbox address for receipts and verification messages
+- `agentAutoApproveEnabled`: whether API-key-created payment tasks can auto-approve without a dashboard click
 
 When the user asks for readiness, report wallet balance, deposit address, inbox state, and whether a payment task can proceed.
 
@@ -104,7 +105,6 @@ curl -X POST -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "intentType": "one_time_purchase",
-    "approvalMode": "approval_based",
     "merchantName": "OpenAI",
     "merchantDomain": "openai.com",
     "expectedAmount": "20.00",
@@ -121,9 +121,8 @@ Use payment intents to hold merchant context, approval state, and audit history.
 
 Rules:
 
-- default to `approval_based`
-- use `pre_authorized` only when the user explicitly says that this scope is already authorized
-- if you only have an API key and the intent is `pending_approval`, stop and ask the user to approve it in the dashboard instead of pretending you can finish approval yourself
+- use the account's `agentAutoApproveEnabled` state as the default control path for API-key-created tasks
+- if the account does not have agent auto-approval enabled and the intent is `pending_approval`, stop and ask the user to approve it in the dashboard instead of pretending you can finish approval yourself
 - treat the intent as the source of truth for execution state, not the card
 
 ### 3. Inspect the payment task state
@@ -185,6 +184,6 @@ Use `references/payment-safety.md` for expanded safety, verification, and retry 
 ## Good Default Prompt Shapes
 
 - `Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks are ready.`
-- `Create an approval-based payment task for this purchase and keep the amount bounded to the expected total.`
+- `Create a payment task for this purchase and keep the amount bounded to the expected total.`
 - `Continue this already approved payment step, and only read the latest verification message if the checkout asks for a code.`
-- `Check whether this payment task completed, still needs approval, or should be inspected before retrying.`
+- `Check whether this payment task completed, still needs dashboard approval, or should be inspected before retrying.`

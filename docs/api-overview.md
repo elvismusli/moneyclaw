@@ -18,15 +18,22 @@ Authorization: Bearer $MONEYCLAW_API_KEY
 
 - `GET /me`
 
-Use this first. It returns the current wallet state, mailbox address, deposit context, and other readiness data.
+Use this first. It returns the current wallet state, mailbox address, deposit context, `agentAutoApproveEnabled`, and other readiness data.
 Agents should read `mailboxAddress` from this response instead of hardcoding an inbox domain.
 On freshly created accounts, this first authenticated read may also finish mailbox, deposit-address, and provider setup automatically, so users and agents should not need a separate setup step before creating a payment task.
+
+### Configure account-level agent approval
+
+- `PATCH /me/agent-approval`
+
+Turns account-level agent auto-approval on or off for API-key-created payment tasks. This control
+requires a dashboard user session, not an API key.
 
 ### Create a payment task
 
 - `POST /payment-intents`
 
-Creates an auditable buyer-side payment task with approval mode, merchant hints, expected amount, and funding boundaries.
+Creates an auditable buyer-side payment task with merchant hints, expected amount, and funding boundaries. For API-key-created tasks, the account-level `agentAutoApproveEnabled` setting determines whether the task waits for dashboard approval or moves through the auto-approved path.
 
 ### Fetch intent-scoped credentials
 
@@ -54,7 +61,7 @@ Approved `subscription_setup` payment tasks now auto-create the recurring subscr
 automatically attempt hidden-card preparation when wallet funding is ready. Direct subscription
 endpoints remain recovery-oriented tools, not the default buyer flow.
 
-Approved or pre-authorized `one_time_purchase` and `merchant_invoice` tasks can also auto-attempt
+Approved `one_time_purchase` and `merchant_invoice` tasks can also auto-attempt
 hidden-card preparation when wallet funds are available and the selected BIN fits within the task
 funding cap.
 

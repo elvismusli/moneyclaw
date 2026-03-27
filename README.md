@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Prepaid wallet. Payment tasks. Hidden subscription cards. OTP and 3DS inbox.
+  Prepaid wallet. Payment tasks. Hidden subscription cards. Verification inbox.
 </p>
 
 <p align="center">
@@ -98,8 +98,8 @@ MoneyClaw is built around bounded, inspectable agent payments.
 - prepaid balances keep risk capped
 - payment tasks and subscriptions hold approval and audit state
 - hidden execution cards stay scoped to the payment flow that needs them
-- OTP and 3DS verification flows use a dedicated inbox
-- the user can operate in approval-based or pre-authorized mode
+- verification-message flows use a dedicated inbox
+- the user can keep dashboard approval on or deliberately enable account-level agent auto-approval
 
 Important boundary:
 

@@ -8,14 +8,14 @@ The goal is not to make payments invisible. The goal is to make real payments bo
 
 - prepaid by default
 - bounded spend
-- explicit user approval by default, with optional pre-authorized scopes configured ahead of time
+- dashboard approval by default, with optional account-level agent auto-approval configured ahead of time
 - visible wallet and payment-task history
 - system-managed execution rather than card-as-product-object
 - dedicated verification inbox
 
 ## What MoneyClaw Is For
 
-MoneyClaw is for real purchases and payment flows requested or approved by the user. Some accounts may also use narrowly scoped pre-authorized operation that was configured ahead of time.
+MoneyClaw is for real purchases and payment flows requested or approved by the user. Some accounts may also enable narrowly scoped agent auto-approval ahead of time so their connected agent can keep moving without a second dashboard click.
 
 ## What MoneyClaw Is Not For
 

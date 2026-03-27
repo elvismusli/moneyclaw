@@ -20,8 +20,8 @@ Start a fresh session after install.
 
 ## Choose Your Control Mode
 
-- approval-based: default and recommended; the agent asks before payment actions
-- pre-authorized: use only when you deliberately configured that spend scope ahead of time
+- dashboard approval: default; API-key-created tasks wait for approval in the MoneyClaw dashboard
+- agent auto-approval: optional; enable it in the dashboard only if you want your connected OpenClaw agent to keep moving without a second approval click
 
 ## Suggested First Session
 
@@ -34,7 +34,7 @@ Check my MoneyClaw account and tell me whether it is purchase-ready.
 ### 2. Create a payment task
 
 ```text
-Create an approval-based payment task for this purchase and keep the amount bounded to the expected total.
+Create a payment task for this purchase and keep the amount bounded to the expected total.
 ```
 
 ### 3. Continue the approved payment step
@@ -47,6 +47,7 @@ Continue this approved payment step and only read the latest verification messag
 
 - wallet funds the execution
 - payment tasks are the main product object for the default buyer flow
+- account-level agent auto-approval controls whether OpenClaw needs a second dashboard approval click
 - verification messages come through the dedicated inbox
 - MoneyClaw prepares any needed execution path behind the scenes
 - transaction state should be checked before retries

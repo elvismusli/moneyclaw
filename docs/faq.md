@@ -14,7 +14,7 @@ Yes. The public docs and skill are intentionally honest about that. The safety b
 
 ## Does MoneyClaw support pre-authorized operation?
 
-Yes, but approval-based operation is the default. Pre-authorized execution should be treated as an advanced mode that the user deliberately configures ahead of time for a specific spending scope.
+Yes. Dashboard approval is the default, but users can deliberately enable account-level agent auto-approval when they want their connected agent to keep moving without a second dashboard click.
 
 ## Where is the exact skill file?
 

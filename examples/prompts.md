@@ -9,7 +9,7 @@ Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks a
 ## Payment Task
 
 ```text
-Create an approval-based payment task for this purchase and keep the amount bounded to the requested total.
+Create a payment task for this purchase and keep the amount bounded to the requested total.
 ```
 
 ## Continue Payment Step
