@@ -43,8 +43,12 @@ Reads the newest verification code from the agent's inbox when checkout asks for
 
 Recurring subscriptions and merchant-side flows exist too, but they are not the default buyer flow.
 
+Approved `subscription_setup` payment tasks now auto-create the recurring subscription record and
+automatically attempt hidden-card preparation when wallet funding is ready. Direct subscription
+endpoints remain recovery-oriented tools, not the default buyer flow.
+
 - `POST /subscriptions`
-- `POST /subscriptions/{subscriptionId}/prepare-card`
+- `POST /subscriptions/{subscriptionId}/prepare-card` (explicit retry path)
 - `GET /subscriptions/due`
 - `GET /subscriptions/{subscriptionId}/renewal-preflight`
 - `POST /subscriptions/{subscriptionId}/prepare-renewal`
