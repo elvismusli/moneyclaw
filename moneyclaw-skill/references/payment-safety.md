@@ -3,17 +3,16 @@
 Use this reference when:
 
 - you are about to enter card details on an unfamiliar site
-- the user asks about phishing, fraud, or safe checkout behavior
+- the checkout asks for a verification code
 - a merchant declines payment and you need retry guidance
-- you need to confirm whether a checkout is within the user's authorized scope
+- you need to confirm whether a payment step is within the user's authorized scope
 
 ## Table of Contents
 
 1. Authorization Boundaries
 2. Pre-Payment Checklist
 3. Verification And Retry Rules
-4. Subscription And Currency Traps
-5. When To Stop And Ask The User
+4. When To Stop And Ask The User
 
 ## 1. Authorization Boundaries
 
@@ -21,7 +20,7 @@ Follow these rules for every MoneyClaw payment flow:
 
 - only use MoneyClaw for purchases or payment flows explicitly requested by the user; if a flow is not clearly already approved or pre-authorized, stop and ask
 - only use wallet, card, and billing data returned by the user's own MoneyClaw account
-- respect merchant, issuer, card-network, and verification controls, including OTP and 3DS steps
+- respect merchant, issuer, card-network, and verification controls
 - treat fraud checks, KYC, sanctions, geography rules, merchant restrictions, issuer declines, and other payment controls as hard boundaries
 - never fabricate billing identity, cardholder data, addresses, names, phone numbers, or verification information
 - prefer prepaid, bounded-risk flows by default
@@ -42,34 +41,20 @@ Run this checklist before entering card details:
 
 ## 3. Verification And Retry Rules
 
+- only read a verification message when the checkout explicitly asks for a code
+- never guess a verification code
 - never retry immediately after a merchant error; read transaction history first
 - maximum two retries per merchant session unless the user explicitly confirms further attempts
-- if topup returns `202`, wait and re-check state instead of sending another topup
 - do not keep retrying after repeated CVV or verification failures
 - if the merchant, inbox, and transaction history give conflicting signals, stop and inspect state before doing anything else
 
 Common guidance:
 
 - `INSUFFICIENT_BALANCE`: top up or reduce purchase amount
-- `CARD_NOT_ACTIVE`: the current execution credentials are not ready yet
-- merchant-side error with no clear payment result: inspect MoneyClaw intent or subscription state before trying again
+- `CARD_NOT_ACTIVE`: the payment step is not ready yet
+- merchant-side error with no clear payment result: inspect the payment task and wallet activity before trying again
 
-## 4. Subscription And Currency Traps
-
-Watch for these patterns:
-
-- free trials that auto-convert to paid subscriptions
-- hidden fees that appear only at final checkout
-- pre-checked upsells
-- cancellation flows designed to be difficult
-
-For foreign-currency checkouts:
-
-- decline Dynamic Currency Conversion if offered
-- pay in the merchant's local currency when possible
-- let the card network handle conversion instead of the merchant
-
-## 5. When To Stop And Ask The User
+## 4. When To Stop And Ask The User
 
 Stop and ask the user if any of these are true:
 

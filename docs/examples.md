@@ -14,16 +14,10 @@ Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks a
 Create an approval-based payment task for this purchase and keep the amount bounded to the requested total.
 ```
 
-### Prepare A Subscription
+### Continue A Payment Step
 
 ```text
-Create a subscription setup for this service, then prepare the recurring payment flow and keep the execution card hidden unless checkout needs credentials.
-```
-
-### Checkout
-
-```text
-Continue this already approved checkout and, if 3DS appears, retrieve the latest verification message from MoneyClaw inbox and verify the final transaction result.
+Continue this approved payment step and only read the latest verification message from MoneyClaw inbox if the checkout asks for a code.
 ```
 
 ## Curl
@@ -41,11 +35,11 @@ curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
 curl -X POST \
   -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
   -H "Content-Type: application/json" \
-  -d '{"intentType":"subscription_setup","approvalMode":"approval_based","merchantName":"OpenAI","merchantDomain":"openai.com","expectedAmount":"20.00","fundingCap":"20.00","currency":"USD"}' \
+  -d '{"intentType":"one_time_purchase","approvalMode":"approval_based","merchantName":"OpenAI","merchantDomain":"openai.com","expectedAmount":"20.00","fundingCap":"20.00","currency":"USD"}' \
   https://moneyclaw.ai/api/payment-intents
 ```
 
-### Fetch Latest OTP
+### Read Latest Verification Message
 
 ```bash
 curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \

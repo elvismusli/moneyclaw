@@ -12,20 +12,8 @@ Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks a
 Create an approval-based payment task for this purchase and keep the amount bounded to the requested total.
 ```
 
-## Subscription Setup
+## Continue Payment Step
 
 ```text
-Create a subscription setup for this service, then prepare the recurring payment flow and keep the execution card hidden unless checkout needs credentials.
-```
-
-## Checkout
-
-```text
-Continue this already approved checkout and, if 3DS appears, retrieve the latest verification message from MoneyClaw inbox and verify the final transaction result.
-```
-
-## Merchant Flow
-
-```text
-Create a hosted invoice for this order and show me the checkout link.
+Continue this approved payment step and only read the latest verification message from MoneyClaw inbox if the checkout asks for a code.
 ```

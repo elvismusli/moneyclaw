@@ -1,7 +1,7 @@
 interface:
   display_name: "MoneyClaw"
-  short_description: "Inspect wallet readiness, create approval-based payment tasks, and assist with user-confirmed subscription or checkout steps"
-  default_prompt: "Use $moneyclaw only when the user explicitly asks to use their own MoneyClaw account. Start by checking wallet readiness. Default to approval-based payment tasks. Before any action that could spend funds, retrieve execution details, retrieve verification messages, or submit a payment step, confirm merchant, amount, currency, and user approval."
+  short_description: "Inspect wallet readiness, create approval-based payment tasks, and continue user-confirmed payment steps"
+  default_prompt: "Use $moneyclaw only when the user explicitly asks to use their own MoneyClaw account. Start by checking wallet readiness. Default to approval-based payment tasks. Do not retrieve execution details or verification messages until the user asks to continue the exact payment step."
 
 policy:
   allow_implicit_invocation: false

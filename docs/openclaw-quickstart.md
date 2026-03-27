@@ -37,23 +37,16 @@ Check my MoneyClaw account and tell me whether it is purchase-ready.
 Create an approval-based payment task for this purchase and keep the amount bounded to the expected total.
 ```
 
-### 3. For recurring spend, create a subscription
+### 3. Continue the approved payment step
 
 ```text
-Turn that approved subscription setup into a recurring subscription and prepare the payment flow for the same service.
-```
-
-### 4. Complete checkout
-
-```text
-Continue this already approved checkout and, if 3DS appears, retrieve the latest verification message from MoneyClaw inbox and verify the final transaction status.
+Continue this approved payment step and only read the latest verification message from MoneyClaw inbox if the checkout asks for a code.
 ```
 
 ## Mental Model
 
 - wallet funds the execution
-- payment tasks and subscriptions are the main product objects
-- recurring subscriptions can use hidden merchant-bound cards
-- verification codes come through the dedicated inbox
-- cards stay behind the system-managed execution layer instead of appearing as the main public integration object
+- payment tasks are the main product object for the default buyer flow
+- verification messages come through the dedicated inbox
+- MoneyClaw prepares any needed execution path behind the scenes
 - transaction state should be checked before retries

@@ -16,10 +16,6 @@ Yes. The public docs and skill are intentionally honest about that. The safety b
 
 Yes, but approval-based operation is the default. Pre-authorized execution should be treated as an advanced mode that the user deliberately configures ahead of time for a specific spending scope.
 
-## Are merchant flows supported?
-
-Yes, but buyer-side checkout is the primary public narrative. Merchant and invoice flows are documented as secondary public capabilities.
-
 ## Where is the exact skill file?
 
 See [moneyclaw-skill/SKILL.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/SKILL.md).

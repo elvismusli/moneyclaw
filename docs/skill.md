@@ -14,12 +14,13 @@ clawhub install moneyclaw
 MONEYCLAW_API_KEY
 ```
 
+The published skill also declares this through `metadata.openclaw.primaryEnv` and `metadata.openclaw.requires.env` so OpenClaw can surface the credential requirement correctly.
+
 ## Read The Skill Files
 
 - [moneyclaw-skill/SKILL.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/SKILL.md)
 - [moneyclaw-skill/agents/openai.yaml](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/agents/openai.yaml)
 - [moneyclaw-skill/references/payment-safety.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/references/payment-safety.md)
-- [moneyclaw-skill/references/acquiring.md](https://github.com/elvismusli/moneyclaw/blob/main/moneyclaw-skill/references/acquiring.md)
 
 ## Scope Note
 

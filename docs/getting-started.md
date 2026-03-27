@@ -6,8 +6,7 @@ It gives an agent:
 
 - a prepaid wallet
 - payment tasks
-- recurring subscriptions
-- a dedicated OTP and 3DS inbox
+- a dedicated verification inbox
 - queryable transaction history
 
 ## What You Need
@@ -33,8 +32,7 @@ Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks a
 ## Execution Model
 
 - use payment tasks as the default buyer-side object
-- use subscriptions for recurring spend
-- treat hidden execution cards as system-managed infrastructure, not as the main user-facing object
+- let MoneyClaw prepare any needed execution path behind the scenes
 - do not model the product around user-facing card issuance or exposed account-level credentials
 
 ## Public Surfaces

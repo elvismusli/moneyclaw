@@ -27,38 +27,28 @@ Agents should read `mailboxAddress` from this response instead of hardcoding an 
 
 Creates an auditable buyer-side payment task with approval mode, merchant hints, expected amount, and funding boundaries.
 
-### Create a subscription
-
-- `POST /subscriptions`
-
-Creates a recurring-spend resource from an approved `subscription_setup` intent.
-
-### Prepare a hidden subscription card
-
-- `POST /subscriptions/{subscriptionId}/prepare-card`
-
-Prepares a persistent hidden merchant-bound card when the recurring flow needs execution credentials.
-
 ### Fetch intent-scoped credentials
 
 - `GET /payment-intents/{intentId}/credentials`
 
 Returns execution credentials only after the intent reaches `card_ready`.
 
-### Renewal loop
+### Read the latest verification message
 
+- `GET /inbox/latest-otp`
+
+Reads the newest verification code from the agent's inbox when checkout asks for one.
+
+## Advanced Endpoints
+
+Recurring subscriptions and merchant-side flows exist too, but they are not the default buyer flow.
+
+- `POST /subscriptions`
+- `POST /subscriptions/{subscriptionId}/prepare-card`
 - `GET /subscriptions/due`
 - `GET /subscriptions/{subscriptionId}/renewal-preflight`
 - `POST /subscriptions/{subscriptionId}/prepare-renewal`
 - `POST /subscriptions/{subscriptionId}/reconcile`
-
-Use this sequence for recurring spend on the same persistent hidden card.
-
-### Fetch the latest OTP
-
-- `GET /inbox/latest-otp`
-
-Reads the newest OTP or 3DS code from the agent's inbox.
 
 ## Merchant And Invoice Endpoints
 

@@ -7,6 +7,5 @@ Start with:
 - [SKILL.md](./SKILL.md)
 - [agents/openai.yaml](./agents/openai.yaml)
 - [references/payment-safety.md](./references/payment-safety.md)
-- [references/acquiring.md](./references/acquiring.md)
 
 This is the public skill layer only. Internal operator notes and private deployment context are intentionally not published here.
