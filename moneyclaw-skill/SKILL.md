@@ -68,12 +68,13 @@ Before any action that can spend funds, retrieve execution details, retrieve ver
 
 Use the product in this order:
 
-1. `GET /api/me` for wallet readiness, deposit address, and inbox context.
+1. `GET /api/me` for wallet readiness, deposit address, and inbox context. Fresh accounts may also finish mailbox, deposit-address, and provider setup on this first authenticated read.
 2. `POST /api/payment-intents` with `approval_based` for the exact purchase.
-3. Wait for approval or a ready state on that payment task.
+3. Wait for approval or a ready state on that payment task. Approved one-time tasks can auto-prepare a hidden execution card when wallet funding is available and the task cap can cover the selected BIN requirement.
 4. Use `GET /api/payment-intents/:intentId/credentials` only when the task is `card_ready` and the user explicitly asked to continue the current payment step.
 5. Read `GET /api/inbox/latest-otp` only if the checkout explicitly asks for a verification code and the user asked to proceed.
-6. Inspect payment-task state and wallet transactions before retrying.
+6. After a successful one-time checkout, use `POST /api/payment-intents/:intentId/reconcile` to write the settled charge back into MoneyClaw accounting.
+7. Inspect payment-task state and wallet transactions before retrying.
 
 ## Load References When Needed
 

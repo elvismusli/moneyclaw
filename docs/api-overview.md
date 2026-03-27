@@ -20,6 +20,7 @@ Authorization: Bearer $MONEYCLAW_API_KEY
 
 Use this first. It returns the current wallet state, mailbox address, deposit context, and other readiness data.
 Agents should read `mailboxAddress` from this response instead of hardcoding an inbox domain.
+On freshly created accounts, this first authenticated read may also finish mailbox, deposit-address, and provider setup automatically, so users and agents should not need a separate setup step before creating a payment task.
 
 ### Create a payment task
 
@@ -32,6 +33,12 @@ Creates an auditable buyer-side payment task with approval mode, merchant hints,
 - `GET /payment-intents/{intentId}/credentials`
 
 Returns execution credentials only after the intent reaches `card_ready`.
+
+### Reconcile a one-time payment task
+
+- `POST /payment-intents/{intentId}/reconcile`
+
+Use this after a successful one-time hidden-card checkout to write the settled spend back into MoneyClaw accounting.
 
 ### Read the latest verification message
 
@@ -46,6 +53,10 @@ Recurring subscriptions and merchant-side flows exist too, but they are not the 
 Approved `subscription_setup` payment tasks now auto-create the recurring subscription record and
 automatically attempt hidden-card preparation when wallet funding is ready. Direct subscription
 endpoints remain recovery-oriented tools, not the default buyer flow.
+
+Approved or pre-authorized `one_time_purchase` and `merchant_invoice` tasks can also auto-attempt
+hidden-card preparation when wallet funds are available and the selected BIN fits within the task
+funding cap.
 
 - `POST /subscriptions`
 - `POST /subscriptions/{subscriptionId}/prepare-card` (explicit retry path)
