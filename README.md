@@ -53,10 +53,10 @@ With MoneyClaw, an agent can:
 
 - check wallet and inbox readiness
 - create payment tasks
-- create subscriptions for recurring spend
+- start recurring payment setups
 - prepare hidden merchant-bound subscription cards when execution needs them
 - complete browser checkout
-- fetch OTP or 3DS codes from a dedicated inbox
+- fetch verification codes from a dedicated inbox
 - verify the final transaction result
 
 Execution note:
