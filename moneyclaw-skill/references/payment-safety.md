@@ -3,7 +3,7 @@
 Use this reference when:
 
 - you are about to enter card details on an unfamiliar site
-- the checkout asks for a verification code
+- the checkout asks for unexpected additional verification
 - a merchant declines payment and you need retry guidance
 - you need to confirm whether a payment step is within the user's authorized scope
 
@@ -11,7 +11,7 @@ Use this reference when:
 
 1. Authorization Boundaries
 2. Pre-Payment Checklist
-3. Verification And Retry Rules
+3. Additional Verification And Retry Rules
 4. When To Stop And Ask The User
 
 ## 1. Authorization Boundaries
@@ -39,13 +39,13 @@ Run this checklist before entering card details:
 8. If the merchant asks for information that is not present in the account data, stop and ask the user.
 9. If the flow shows obvious scam signals, do not continue.
 
-## 3. Verification And Retry Rules
+## 3. Additional Verification And Retry Rules
 
-- only read a verification message when the checkout explicitly asks for a code
-- never guess a verification code
+- do not treat extra verification as a normal default path for MoneyClaw payments
+- do not invent, infer, or work around an additional verification step
 - never retry immediately after a merchant error; read transaction history first
 - maximum two retries per merchant session unless the user explicitly confirms further attempts
-- do not keep retrying after repeated CVV or verification failures
+- do not keep retrying after repeated CVV or extra-verification failures
 - if the merchant, inbox, and transaction history give conflicting signals, stop and inspect state before doing anything else
 
 Common guidance:

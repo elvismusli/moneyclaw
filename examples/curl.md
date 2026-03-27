@@ -22,9 +22,9 @@ curl -X POST \
 If the account has `agentAutoApproveEnabled=true`, API-key-created tasks can move through the
 auto-approved path without a second dashboard click. Otherwise they will wait for dashboard approval.
 
-## Read Latest Verification Message
+## Inspect Latest Inbox Message
 
 ```bash
 curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  https://moneyclaw.ai/api/inbox/latest-otp
+  https://moneyclaw.ai/api/inbox/latest
 ```

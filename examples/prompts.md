@@ -15,5 +15,5 @@ Create a payment task for this purchase and keep the amount bounded to the reque
 ## Continue Payment Step
 
 ```text
-Continue this approved payment step and only read the latest verification message from MoneyClaw inbox if the checkout asks for a code.
+Continue this approved payment step and confirm the final result.
 ```

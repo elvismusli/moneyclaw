@@ -40,7 +40,7 @@ Create a payment task for this purchase and keep the amount bounded to the expec
 ### 3. Continue the approved payment step
 
 ```text
-Continue this approved payment step and only read the latest verification message from MoneyClaw inbox if the checkout asks for a code.
+Continue this approved payment step and confirm the final result.
 ```
 
 ## Mental Model
@@ -48,6 +48,6 @@ Continue this approved payment step and only read the latest verification messag
 - wallet funds the execution
 - payment tasks are the main product object for the default buyer flow
 - account-level agent auto-approval controls whether OpenClaw needs a second dashboard approval click
-- verification messages come through the dedicated inbox
+- receipts and account messages stay visible in the dedicated inbox
 - MoneyClaw prepares any needed execution path behind the scenes
 - transaction state should be checked before retries

@@ -17,7 +17,7 @@ Create a payment task for this purchase and keep the amount bounded to the reque
 ### Continue A Payment Step
 
 ```text
-Continue this approved payment step and only read the latest verification message from MoneyClaw inbox if the checkout asks for a code.
+Continue this approved payment step and confirm the final result.
 ```
 
 ## Curl
@@ -39,9 +39,9 @@ curl -X POST \
   https://moneyclaw.ai/api/payment-intents
 ```
 
-### Read Latest Verification Message
+### Inspect Latest Inbox Message
 
 ```bash
 curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  https://moneyclaw.ai/api/inbox/latest-otp
+  https://moneyclaw.ai/api/inbox/latest
 ```

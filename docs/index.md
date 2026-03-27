@@ -4,7 +4,7 @@ layout: home
 hero:
   name: MoneyClaw
   text: Payments your OpenClaw agent can actually execute safely.
-  tagline: Give your agent a prepaid wallet, bounded payment tasks, an optional auto-approval toggle, and a dedicated verification inbox for user-authorized payment flows.
+  tagline: Give your agent a prepaid wallet, bounded payment tasks, an optional auto-approval toggle, and a dedicated account inbox for user-authorized payment flows.
   image:
     src: /crab.png
     alt: MoneyClaw mascot
@@ -24,8 +24,8 @@ features:
     details: Keep agent payments prepaid and bounded by the wallet balance you deliberately loaded.
   - title: Payment tasks first
     details: Use payment intents as the default execution surface for approval, merchant context, and audit state.
-  - title: Verification inbox
-    details: Let the agent read a verification message only when the checkout explicitly asks for a code.
+  - title: Account inbox
+    details: Keep receipts and account messages visible without making inbox retrieval the main payment path.
   - title: Approval-first control
     details: Keep dashboard approval on by default. Enable account-level agent auto-approval only when you deliberately want your connected agent to keep moving without a second click.
   - title: OpenClaw skill included
@@ -39,7 +39,6 @@ MoneyClaw is the layer that lets the loop continue:
 - check account readiness
 - create a payment task
 - continue an already approved payment step
-- retrieve verification messages when the user asks to proceed
 - verify the final transaction state
 
 ## Built For Safe Agent Payments
@@ -47,7 +46,7 @@ MoneyClaw is the layer that lets the loop continue:
 - prepaid balances keep risk bounded
 - wallet and payment-task history stay inspectable
 - dashboard approval is the safe default
-- verification stays inside the normal checkout flow
+- account messages stay inspectable without changing the main buyer flow
 - transaction history stays queryable before retries
 
 ## Read In This Order

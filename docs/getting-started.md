@@ -6,7 +6,7 @@ It gives an agent:
 
 - a prepaid wallet
 - payment tasks
-- a dedicated verification inbox
+- a dedicated account inbox
 - queryable transaction history
 
 ## What You Need

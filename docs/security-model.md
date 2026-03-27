@@ -11,7 +11,7 @@ The goal is not to make payments invisible. The goal is to make real payments bo
 - dashboard approval by default, with optional account-level agent auto-approval configured ahead of time
 - visible wallet and payment-task history
 - system-managed execution rather than card-as-product-object
-- dedicated verification inbox
+- dedicated account inbox
 
 ## What MoneyClaw Is For
 
@@ -31,7 +31,7 @@ MoneyClaw is not a tool for:
 
 - inspect wallet and payment-task state before acting
 - keep spending prepaid and task-scoped
-- use verification messages only as part of the normal checkout flow
+- keep inbox access secondary to the main payment-task flow
 - inspect final transaction state before retrying
 
 ## Public Boundary

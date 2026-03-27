@@ -12,7 +12,7 @@ metadata:
 
 # MoneyClaw
 
-MoneyClaw helps OpenClaw agents inspect prepaid payment state, create auditable payment tasks, and continue explicitly requested payment steps with verification-message support when needed.
+MoneyClaw helps OpenClaw agents inspect prepaid payment state, create auditable payment tasks, and continue explicitly requested payment steps.
 
 Primary use case: buyer-side payments for OpenClaw agents.
 
@@ -32,7 +32,7 @@ MoneyClaw is designed for real, user-authorized agent payments.
 
 - use prepaid balances to keep risk bounded
 - use payment intents as the main auditable execution surface
-- use the account inbox only when a checkout explicitly asks for a verification code
+- keep account inbox state inspectable for receipts and account messages
 - let the user approve the payment step before money moves
 
 ## Approval Model
@@ -57,7 +57,7 @@ Default to dashboard approval unless the account has explicitly enabled agent au
 
 ## Before Any High-Risk Step
 
-Before any action that can spend funds, retrieve execution details, retrieve verification messages, or submit a payment step:
+Before any action that can spend funds, retrieve execution details, or submit a payment step:
 
 1. Confirm the exact merchant domain.
 2. Confirm the amount and currency.
@@ -72,13 +72,12 @@ Use the product in this order:
 2. `POST /api/payment-intents` for the exact purchase.
 3. If `agentAutoApproveEnabled` is off, wait for dashboard approval. If it is on, the API-key task can move directly toward `approved` and `card_ready`. Approved one-time tasks can auto-prepare a hidden execution card when wallet funding is available and the task cap can cover the selected BIN requirement.
 4. Use `GET /api/payment-intents/:intentId/credentials` only when the task is `card_ready` and the user explicitly asked to continue the current payment step.
-5. Read `GET /api/inbox/latest-otp` only if the checkout explicitly asks for a verification code and the user asked to proceed.
-6. After a successful one-time checkout, use `POST /api/payment-intents/:intentId/reconcile` to write the settled charge back into MoneyClaw accounting.
-7. Inspect payment-task state and wallet transactions before retrying.
+5. After a successful one-time checkout, use `POST /api/payment-intents/:intentId/reconcile` to write the settled charge back into MoneyClaw accounting.
+6. Inspect payment-task state and wallet transactions before retrying.
 
 ## Load References When Needed
 
-- Read `references/payment-safety.md` before entering payment details on an unfamiliar merchant, when a checkout keeps failing, or when verification and retry boundaries matter.
+- Read `references/payment-safety.md` before entering payment details on an unfamiliar merchant, when a checkout keeps failing, or when retry boundaries matter.
 
 ## Core Jobs
 
@@ -93,7 +92,7 @@ Important fields:
 
 - `balance`: wallet balance
 - `depositAddress`: where to send USDT
-- `mailboxAddress`: inbox address for receipts and verification messages
+- `mailboxAddress`: inbox address for receipts and account messages
 - `agentAutoApproveEnabled`: whether API-key-created payment tasks can auto-approve without a dashboard click
 
 When the user asks for readiness, report wallet balance, deposit address, inbox state, and whether a payment task can proceed.
@@ -157,33 +156,20 @@ Rules:
 - do not treat these execution details as a general account-level card surface
 - do not expose PAN or CVV longer than needed for the active checkout
 
-### 6. Read the latest verification message only when needed
-
-```bash
-curl -H "Authorization: Bearer $MONEYCLAW_API_KEY" \
-  https://moneyclaw.ai/api/inbox/latest-otp
-```
-
-Rules:
-
-- use this only when the checkout explicitly asks for a verification code
-- never guess or fabricate a code
-- if the mailbox, merchant, and task state conflict, stop and inspect before retrying
-
 ## Payment Execution Rules
 
 - The spending model is prepaid. The loaded balance is the hard limit.
 - Before payment, confirm the merchant domain and total amount are correct.
 - Use the billing address returned by MoneyClaw. Never invent one.
-- Wait for the verification message instead of guessing codes.
+- If a merchant asks for unexpected out-of-band verification, stop and ask the user instead of assuming the skill should continue automatically.
 - Do not retry the same merchant checkout more than twice in one session without user confirmation or clear pre-authorization.
 - If the user asks for a risky or suspicious payment, stop and explain why.
 
-Use `references/payment-safety.md` for expanded safety, verification, and retry guidance.
+Use `references/payment-safety.md` for expanded safety and retry guidance.
 
 ## Good Default Prompt Shapes
 
 - `Check my MoneyClaw account and tell me if the wallet, inbox, and payment tasks are ready.`
 - `Create a payment task for this purchase and keep the amount bounded to the expected total.`
-- `Continue this already approved payment step, and only read the latest verification message if the checkout asks for a code.`
+- `Continue this already approved payment step.`
 - `Check whether this payment task completed, still needs dashboard approval, or should be inspected before retrying.`

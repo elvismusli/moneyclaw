@@ -47,11 +47,11 @@ Returns execution credentials only after the intent reaches `card_ready`.
 
 Use this after a successful one-time hidden-card checkout to write the settled spend back into MoneyClaw accounting.
 
-### Read the latest verification message
+### Inspect the latest inbox message
 
-- `GET /inbox/latest-otp`
+- `GET /inbox/latest`
 
-Reads the newest verification code from the agent's inbox when checkout asks for one.
+Reads the newest account email. The inbox is useful for receipts and account state, but it is not the default buyer-side execution path.
 
 ## Advanced Endpoints
 
