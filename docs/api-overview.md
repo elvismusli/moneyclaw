@@ -34,6 +34,7 @@ requires a dashboard user session, not an API key.
 - `POST /payment-intents`
 
 Creates an auditable buyer-side payment task with merchant hints, expected amount, and funding boundaries. For API-key-created tasks, the account-level `agentAutoApproveEnabled` setting determines whether the task waits for dashboard approval or moves through the auto-approved path.
+If a task remains `approved`, inspect the returned `executionBlocker` field before assuming the funding cap is the only problem; it now surfaces blocked card-preparation reasons directly.
 
 ### Fetch intent-scoped credentials
 
