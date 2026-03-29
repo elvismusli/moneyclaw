@@ -35,6 +35,7 @@ requires a dashboard user session, not an API key.
 
 Creates an auditable buyer-side payment task with merchant hints, expected amount, and funding boundaries. For API-key-created tasks, the account-level `agentAutoApproveEnabled` setting determines whether the task waits for dashboard approval or moves through the auto-approved path.
 If a task remains `approved`, inspect the returned `executionBlocker` field before assuming the funding cap is the only problem; it now surfaces blocked card-preparation reasons directly.
+For the first hidden-card bootstrap on an account, MoneyClaw may still reserve the fixed provider minimum initial deposit even if the current one-time purchase amount is smaller. Any residual stays on the same hidden execution card for later tasks.
 
 ### Fetch intent-scoped credentials
 
@@ -59,12 +60,11 @@ Reads the newest account email. The inbox is useful for receipts and account sta
 Recurring subscriptions and merchant-side flows exist too, but they are not the default buyer flow.
 
 Approved `subscription_setup` payment tasks now auto-create the recurring subscription record and
-automatically attempt hidden-card preparation when wallet funding is ready. Direct subscription
+automatically attempt shared hidden-card preparation when wallet funding is ready. Direct subscription
 endpoints remain recovery-oriented tools, not the default buyer flow.
 
 Approved `one_time_purchase` and `merchant_invoice` tasks can also auto-attempt
-hidden-card preparation when wallet funds are available and the selected BIN fits within the task
-funding cap.
+hidden-card preparation when wallet funds are available.
 
 - `POST /subscriptions`
 - `POST /subscriptions/{subscriptionId}/prepare-card` (explicit retry path)

@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  Prepaid wallet. Payment tasks. Hidden subscription cards. Account inbox.
+  Prepaid wallet. Payment tasks. One hidden execution card. Account inbox.
 </p>
 
 <p align="center">
@@ -54,7 +54,7 @@ With MoneyClaw, an agent can:
 - check wallet and inbox readiness
 - create payment tasks
 - start recurring payment setups
-- prepare hidden merchant-bound subscription cards when execution needs them
+- prepare or reuse one hidden execution card under the account when execution needs it
 - complete browser checkout
 - inspect account inbox messages when needed
 - verify the final transaction result
@@ -97,7 +97,7 @@ MoneyClaw is built around bounded, inspectable agent payments.
 
 - prepaid balances keep risk capped
 - payment tasks and subscriptions hold approval and audit state
-- hidden execution cards stay scoped to the payment flow that needs them
+- one hidden execution card stays under the account and is reused across payment tasks and subscriptions
 - receipts and account messages stay visible in a dedicated inbox
 - the user can keep dashboard approval on or deliberately enable account-level agent auto-approval
 
