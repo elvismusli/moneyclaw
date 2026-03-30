@@ -71,7 +71,7 @@ Use the product in this order:
 1. `GET /api/me` for wallet readiness, deposit address, and inbox context. Fresh accounts may also finish mailbox, deposit-address, and provider setup on this first authenticated read.
 2. `POST /api/payment-intents` for the exact purchase.
 3. If `agentAutoApproveEnabled` is off, wait for dashboard approval. If it is on, the API-key task can move directly toward `approved` and `card_ready`. Approved tasks can auto-prepare or reuse the account's hidden execution card when wallet funding is available.
-   On the first hidden-card bootstrap for an account, MoneyClaw may reserve the provider minimum initial deposit plus the current MoneyClaw issue fee onto that shared hidden card even if the current task amount is smaller. Any residual stays on the same hidden card for later tasks.
+   On the first hidden-card bootstrap for an account, MoneyClaw may reserve the provider minimum initial deposit onto that shared hidden card even if the current task amount is smaller. Any residual stays on the same hidden card for later tasks.
 4. Use `GET /api/payment-intents/:intentId/credentials` only when the task is `card_ready` and the user explicitly asked to continue the current payment step.
 5. After a successful one-time checkout, use `POST /api/payment-intents/:intentId/reconcile` to write the settled charge back into MoneyClaw accounting.
 6. Inspect payment-task state and wallet transactions before retrying.

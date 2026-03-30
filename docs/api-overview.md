@@ -35,7 +35,7 @@ requires a dashboard user session, not an API key.
 
 Creates an auditable buyer-side payment task with merchant hints, expected amount, and funding boundaries. For API-key-created tasks, the account-level `agentAutoApproveEnabled` setting determines whether the task waits for dashboard approval or moves through the auto-approved path.
 If a task remains `approved`, inspect the returned `executionBlocker` field before assuming the funding cap is the only problem; it now surfaces blocked card-preparation reasons directly.
-For the first hidden-card bootstrap on an account, MoneyClaw may still reserve the fixed provider minimum initial deposit plus the current MoneyClaw issue fee even if the current one-time purchase amount is smaller. Any residual stays on the same hidden execution card for later tasks.
+For the first hidden-card bootstrap on an account, MoneyClaw may still reserve the fixed provider minimum initial deposit even if the current one-time purchase amount is smaller. Any residual stays on the same hidden execution card for later tasks.
 
 ### Fetch intent-scoped credentials
 
